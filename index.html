@@ -358,63 +358,65 @@
       top: 16px;
       right: 16px;
     }
-  /* === COLORI PER LE NOTE (scala + tonica) === */
+/* ==========================================
+   VARIANTE D – Rettangolino/pill sopra,
+   nota + grado sotto (markup invariato)
+   ========================================== */
+
+/* Colori */
 :root {
   --note-normal-red: #e11d48;  /* rosso note normali */
   --note-root-yellow: #facc15; /* giallo tonica */
 }
 
-/* Reset: niente riempimento di tutta la cella per le note in scala */
+/* Rimuove riempimento cella precedente */
 .fretboard .note-cell.in-scale,
 .fretboard .note-cell.root-note {
   background-color: var(--bg-fret-cell) !important;
   color: var(--text-body);
 }
 
-/* Base tipografica della nota sul manico */
+/* Base della nota */
 .fretboard .note-name {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-body);
   display: inline-block;
   text-align: center;
-}
-
-/* Variante A: cerchio pieno con nota + grado dentro */
-.fretboard .note-cell.in-scale .note-name,
-.fretboard .note-cell.root-note .note-name {
-  min-width: 30px;
-  min-height: 30px;
-  border-radius: 999px;
-  padding: 4px 8px;
+  padding-top: 22px; /* spazio per la pill sopra */
+  position: relative;
   line-height: 1.1;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  box-shadow: 0 0 0 2px var(--bg-fretboard);
 }
 
-/* Note normali (rosso) */
-.fretboard .note-cell.in-scale .note-name {
-  background-color: var(--note-normal-red);
-  color: #f9fafb;  /* testo chiaro ad alto contrasto */
+/* Rettangolino/pill sopra */
+.fretboard .note-name::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px var(--bg-fretboard);
 }
 
-/* Tonica (giallo) */
-.fretboard .note-cell.root-note .note-name {
-  background-color: var(--note-root-yellow);
-  color: #111827; /* leggermente più scuro sul giallo */
+/* Colori pill normali e toniche */
+.fretboard .note-cell.in-scale .note-name::before {
+  background: var(--note-normal-red);
 }
 
-/* Gradi dentro il pallino: chiari ma leggibili */
-.fretboard .note-cell.in-scale .note-degree,
-.fretboard .note-cell.root-note .note-degree {
+.fretboard .note-cell.root-note .note-name::before {
+  background: var(--note-root-yellow);
+}
+
+/* Gradi sotto la nota: leggibili */
+.fretboard .note-degree {
+  font-size: 0.65rem;
   color: #e5e7eb;
 }
 
-/* Legenda sotto il manico (coerenza colori) */
+/* Legenda coerente */
 .legend-swatch.scale {
   background: var(--note-normal-red);
 }
@@ -1066,6 +1068,7 @@
 </script>
 </body>
 </html>
+
 
 
 
