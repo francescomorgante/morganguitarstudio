@@ -360,49 +360,57 @@
     }
   } /* <--- CHIUSURA DEL MEDIA, PRIMA DELLA VARIANTE D */
  /* ==========================================
-   VARIANTE D – Rettangolino/pill sopra,
-   nota + grado sotto (markup invariato)
+   PALLINO COLORATO SOPRA + CELLA SOFT
+   (nota + grado restano sotto, markup invariato)
    ========================================== */
 
-/* Colori */
+/* Colori pallino e tinta cella */
 :root {
-  --note-normal-red: #e11d48;  /* rosso note normali */
-  --note-root-yellow: #facc15; /* giallo tonica */
+  --note-normal-red: #e11d48;              /* pallino note normali */
+  --note-root-yellow: #facc15;             /* pallino tonica */
+  --note-cell-scale-soft: rgba(225,17,72,0.12);   /* sfondo tenue per note scala */
+  --note-cell-root-soft:  rgba(250,204,21,0.16);  /* sfondo tenue per tonica */
 }
 
-/* Rimuove riempimento cella precedente */
-.fretboard .note-cell.in-scale,
-.fretboard .note-cell.root-note {
-  background-color: var(--bg-fret-cell) !important;
+/* Cella con nota in scala: sfondo tenue */
+.fretboard .note-cell.in-scale {
+  background-color: var(--note-cell-scale-soft);
   color: var(--text-body);
 }
 
-/* Base della nota */
+/* Cella con tonica: sfondo tenue giallino */
+.fretboard .note-cell.root-note {
+  background-color: var(--note-cell-root-soft);
+  color: var(--text-body);
+}
+
+/* Base della nota: spazio per il pallino sopra */
 .fretboard .note-name {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-body);
   display: inline-block;
   text-align: center;
-  padding-top: 22px; /* spazio per la pill sopra */
+  padding-top: 20px; /* spazio per il pallino */
   position: relative;
   line-height: 1.1;
 }
 
-/* Rettangolino/pill sopra */
+/* Pallino sopra le scritte */
 .fretboard .note-name::before {
   content: "";
   position: absolute;
   top: 2px;
   left: 50%;
   transform: translateX(-50%);
-  width: 28px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 999px;
   box-shadow: 0 0 0 1px var(--bg-fretboard);
+  background: transparent; /* sarà colorato dalle regole sotto */
 }
 
-/* Colori pill normali e toniche */
+/* Colori del pallino */
 .fretboard .note-cell.in-scale .note-name::before {
   background: var(--note-normal-red);
 }
@@ -411,13 +419,14 @@
   background: var(--note-root-yellow);
 }
 
-/* Gradi sotto la nota: leggibili */
+/* Gradi sotto la nota: chiari e leggibili su sfondo scuro/soft */
 .fretboard .note-degree {
+  display: block;
   font-size: 0.65rem;
   color: #e5e7eb;
 }
 
-/* Legenda coerente */
+/* Legenda coerente con i nuovi colori */
 .legend-swatch.scale {
   background: var(--note-normal-red);
 }
@@ -1069,6 +1078,7 @@
 </script>
 </body>
 </html>
+
 
 
 
