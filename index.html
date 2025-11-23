@@ -3,231 +3,366 @@
 <head>
   <meta charset="UTF-8" />
   <title>Scale pentatoniche – Trainer CAGED di Francesco Morgante</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
+  :root {
+    --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-    .app-container {
-      max-width: 1100px;
-      width: 100%;
-      padding: 24px;
-      box-sizing: border-box;
-    }
+    --radius-lg: 18px;
+    --radius-md: 10px;
 
+    --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.18);
+  }
+
+  /* ====== TEMI ====== */
+
+  body.theme-dark {
+    --bg-body: #020617;
+    --bg-card: #020617;
+    --bg-elevated: #020617;
+    --bg-fretboard: #020617;
+    --bg-fret-cell: #020617;
+
+    --text-body: #e5e7eb;
+    --text-muted: #9ca3af;
+    --text-soft: #6b7280;
+    --text-strong: #f9fafb;
+
+    --border-subtle: #1f2937;
+    --border-table: #1f2937;
+
+    --accent: #3b82f6;
+    --accent-soft: #1d4ed8;
+    --accent-soft-alt: #0f172a;
+    --accent-badge: #1e293b;
+
+    --note-root-bg: #facc15;
+    --note-root-text: #111827;
+    --note-scale-bg: #2563eb;
+    --note-scale-text: #e5e7eb;
+
+    --legend-scale: #2563eb;
+    --legend-root: #facc15;
+  }
+
+  body.theme-light {
+    --bg-body: #f4f5fb;
+    --bg-card: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-fretboard: #f9fafb;
+    --bg-fret-cell: #ffffff;
+
+    --text-body: #111827;
+    --text-muted: #6b7280;
+    --text-soft: #9ca3af;
+    --text-strong: #020617;
+
+    --border-subtle: #e5e7eb;
+    --border-table: #d1d5db;
+
+    --accent: #2563eb;
+    --accent-soft: #dbeafe;
+    --accent-soft-alt: #eff6ff;
+    --accent-badge: #e5e7eb;
+
+    --note-root-bg: #facc15;
+    --note-root-text: #1f2937;
+    --note-scale-bg: #2563eb;
+    --note-scale-text: #ffffff;
+
+    --legend-scale: #2563eb;
+    --legend-root: #facc15;
+  }
+
+  /* ====== LAYOUT BASE ====== */
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: var(--bg-body);
+    color: var(--text-body);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .app-container {
+    max-width: 1100px;
+    width: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 20px;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+  }
+
+  label {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  select {
+    background: var(--bg-elevated);
+    color: var(--text-body);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    outline: none;
+    min-width: 150px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+
+  select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.5);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--accent-badge);
+    color: var(--text-strong);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .info {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  .scale-notes {
+    margin-top: 6px;
+    font-size: 0.95rem;
+  }
+
+  .scale-notes span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft-alt);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  /* ====== FRETBOARD ====== */
+
+  .fretboard-container {
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .fretboard {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 780px;
+    table-layout: fixed;
+    font-size: 0.75rem;
+    background: var(--bg-fretboard);
+  }
+
+  .fretboard th,
+  .fretboard td {
+    border: 1px solid var(--border-table);
+    text-align: center;
+    padding: 4px 2px;
+  }
+
+  .fretboard th {
+    background: var(--bg-elevated);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .string-label {
+    background: var(--bg-elevated);
+    font-weight: 600;
+    width: 52px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .note-cell {
+    position: relative;
+    height: 34px;
+    cursor: default;
+    background: var(--bg-fret-cell);
+  }
+
+  .note-name {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  .in-scale {
+    background-color: var(--note-scale-bg);
+    color: var(--note-scale-text);
+    font-weight: 600;
+  }
+
+  .root-note {
+    background-color: var(--note-root-bg);
+    color: var(--note-root-text);
+    font-weight: 700;
+  }
+
+  .note-degree {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--bg-fretboard);
+  }
+
+  .legend {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    color: var(--text-soft);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .legend-swatch.scale {
+    background: var(--legend-scale);
+  }
+
+  .legend-swatch.root {
+    background: var(--legend-root);
+  }
+
+  .footnote {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  .box-info {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* ====== BOTTONE TEMA ====== */
+
+  .theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    color: var(--text-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .theme-toggle-icon {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  @media (max-width: 640px) {
     h1 {
-      font-size: 1.8rem;
-      margin-bottom: 4px;
+      font-size: 1.5rem;
     }
-
-    .subtitle {
-      font-size: 0.9rem;
-      color: #9ca3af;
-      margin-bottom: 16px;
+    .app-container {
+      padding: 16px;
     }
-
-    .card {
-      background: #020617;
-      border-radius: 16px;
-      padding: 16px 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-      margin-bottom: 20px;
-      border: 1px solid #1f2937;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .control-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 0.9rem;
-    }
-
-    label {
-      color: #9ca3af;
-    }
-
     select {
-      background: #020617;
-      color: #e5e7eb;
-      border: 1px solid #374151;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 0.9rem;
-      outline: none;
-      min-width: 140px;
+      min-width: 130px;
     }
-
-    select:focus {
-      border-color: #38bdf8;
+    .theme-toggle {
+      top: 16px;
+      right: 16px;
     }
-
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #1e293b;
-      color: #e5e7eb;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .info {
-      font-size: 0.9rem;
-      color: #9ca3af;
-      margin-top: 6px;
-    }
-
-    .scale-notes {
-      margin-top: 6px;
-      font-size: 0.95rem;
-    }
-
-    .scale-notes span {
-      display: inline-block;
-      margin-right: 6px;
-      margin-bottom: 4px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #111827;
-      border: 1px solid #1f2937;
-    }
-
-    .fretboard-container {
-      overflow-x: auto;
-      padding-bottom: 10px;
-    }
-
-    .fretboard {
-      border-collapse: collapse;
-      width: 100%;
-      min-width: 780px;
-      table-layout: fixed;
-      font-size: 0.75rem;
-    }
-
-    .fretboard th,
-    .fretboard td {
-      border: 1px solid #1f2937;
-      text-align: center;
-      padding: 4px 2px;
-    }
-
-    .fretboard th {
-      background: #020617;
-      position: sticky;
-      top: 0;
-      z-index: 2;
-    }
-
-    .string-label {
-      background: #020617;
-      font-weight: 600;
-      width: 48px;
-    }
-
-    .note-cell {
-      position: relative;
-      height: 34px;
-      cursor: default;
-    }
-
-    .note-name {
-      position: relative;
-      z-index: 2;
-    }
-
-    .in-scale {
-      background: radial-gradient(circle at center, #1d4ed8 0, #020617 65%);
-      color: #e5e7eb;
-      font-weight: 600;
-    }
-
-    .root-note {
-      background: radial-gradient(circle at center, #facc15 0, #1d4ed8 40%, #020617 90%);
-      color: #111827;
-      font-weight: 700;
-    }
-
-    .note-degree {
-      display: block;
-      font-size: 0.65rem;
-      color: #cbd5f5;
-    }
-
-    .legend {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      font-size: 0.8rem;
-      margin-top: 8px;
-      color: #9ca3af;
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .legend-swatch {
-      width: 14px;
-      height: 14px;
-      border-radius: 4px;
-      border: 1px solid #1f2937;
-    }
-
-    .legend-swatch.scale {
-      background: radial-gradient(circle at center, #1d4ed8 0, #020617 70%);
-    }
-
-    .legend-swatch.root {
-      background: radial-gradient(circle at center, #facc15 0, #1d4ed8 40%, #020617 90%);
-    }
-
-    .footnote {
-      font-size: 0.75rem;
-      color: #6b7280;
-      margin-top: 8px;
-      line-height: 1.4;
-    }
-
-    .box-info {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 6px;
-    }
-
-    @media (max-width: 640px) {
-      h1 {
-        font-size: 1.4rem;
-      }
-      .app-container {
-        padding: 16px;
-      }
-      select {
-        min-width: 120px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
+  <body class="theme-dark">
   <div class="app-container">
     <h1>Scale pentatoniche – Trainer CAGED di Francesco Morgante</h1>
     <div class="subtitle">
@@ -727,4 +862,5 @@
   </script>
 </body>
 </html>
+
 
