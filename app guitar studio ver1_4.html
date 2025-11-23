@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scale pentatoniche – Trainer CAGED di Francesco Morgante</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      max-width: 1100px;
+      width: 100%;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+      border: 1px solid #1f2937;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.9rem;
+    }
+
+    label {
+      color: #9ca3af;
+    }
+
+    select {
+      background: #020617;
+      color: #e5e7eb;
+      border: 1px solid #374151;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      outline: none;
+      min-width: 140px;
+    }
+
+    select:focus {
+      border-color: #38bdf8;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #1e293b;
+      color: #e5e7eb;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .info {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-top: 6px;
+    }
+
+    .scale-notes {
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+
+    .scale-notes span {
+      display: inline-block;
+      margin-right: 6px;
+      margin-bottom: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #111827;
+      border: 1px solid #1f2937;
+    }
+
+    .fretboard-container {
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .fretboard {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 780px;
+      table-layout: fixed;
+      font-size: 0.75rem;
+    }
+
+    .fretboard th,
+    .fretboard td {
+      border: 1px solid #1f2937;
+      text-align: center;
+      padding: 4px 2px;
+    }
+
+    .fretboard th {
+      background: #020617;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .string-label {
+      background: #020617;
+      font-weight: 600;
+      width: 48px;
+    }
+
+    .note-cell {
+      position: relative;
+      height: 34px;
+      cursor: default;
+    }
+
+    .note-name {
+      position: relative;
+      z-index: 2;
+    }
+
+    .in-scale {
+      background: radial-gradient(circle at center, #1d4ed8 0, #020617 65%);
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .root-note {
+      background: radial-gradient(circle at center, #facc15 0, #1d4ed8 40%, #020617 90%);
+      color: #111827;
+      font-weight: 700;
+    }
+
+    .note-degree {
+      display: block;
+      font-size: 0.65rem;
+      color: #cbd5f5;
+    }
+
+    .legend {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      color: #9ca3af;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      border: 1px solid #1f2937;
+    }
+
+    .legend-swatch.scale {
+      background: radial-gradient(circle at center, #1d4ed8 0, #020617 70%);
+    }
+
+    .legend-swatch.root {
+      background: radial-gradient(circle at center, #facc15 0, #1d4ed8 40%, #020617 90%);
+    }
+
+    .footnote {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .box-info {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.4rem;
+      }
+      .app-container {
+        padding: 16px;
+      }
+      select {
+        min-width: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h1>Scale pentatoniche – Trainer CAGED di Francesco Morgante</h1>
+    <div class="subtitle">
+      Scegli tonalità, tipo di scala, notazione e box. Visualizza le note sul manico in stile CAGED. Ma soprattutto adesso non hai scuse per non studiare
+    </div>
+
+    <div class="card">
+      <div class="controls">
+        <div class="control-group">
+          <label for="rootSelect">Nota fondamentale</label>
+          <select id="rootSelect"></select>
+        </div>
+
+        <div class="control-group">
+          <label for="typeSelect">Tipo di scala</label>
+          <select id="typeSelect">
+            <option value="minor">Pentatonica minore</option>
+            <option value="major">Pentatonica maggiore</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="majorModeSelect">Modo scala maggiore</label>
+          <select id="majorModeSelect">
+            <option value="relative">Relativa minore (stessi box)</option>
+            <option value="trueMajor">Maggiore “reale” (box sulla tonica)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="viewModeSelect">Visualizzazione</label>
+          <select id="viewModeSelect">
+            <option value="full">Manico intero</option>
+            <option value="boxes">Box (metodo CAGED)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="boxSelect">Box</label>
+          <select id="boxSelect" disabled>
+            <option value="1">Box 1 (forma A)</option>
+            <option value="2">Box 2 (forma G)</option>
+            <option value="3">Box 3 (forma E)</option>
+            <option value="4">Box 4 (forma D)</option>
+            <option value="5">Box 5 (forma C)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="notationSelect">Notazione</label>
+          <select id="notationSelect">
+            <option value="en">A B C</option>
+            <option value="it">Do Re Mi</option>
+            <option value="both">A B C + Do Re Mi</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <span class="badge" id="scaleLabel">Scala</span>
+        </div>
+      </div>
+
+      <div class="info">
+        <div id="scaleDescription"></div>
+        <div class="scale-notes" id="scaleNotes"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="fretboard-container">
+        <table class="fretboard" id="fretboard"></table>
+      </div>
+      <div class="box-info" id="boxInfo"></div>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-swatch root"></div>
+          <span>Tonica</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch scale"></div>
+          <span>Altre note della scala</span>
+        </div>
+      </div>
+      <div class="footnote">
+        Lettura dall'alto verso il basso: 1ª corda (cantino) → 6ª corda (basso).<br>
+        In modalità "Box" vengono evidenziate solo le note della scala all'interno del box
+        CAGED relativo alla posizione scelta (due note per corda).
+      </div>
+    </div>
+  </div>
+
+  <script>
+      (function () {
+      // Notazione anglosassone e italiana
+      var EN_NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+      var IT_NOTES = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"];
+
+      // Tuning chitarra standard dal basso verso l'alto: E A D G B E
+      // Indici rispetto a C=0
+      var TUNING = [4, 9, 2, 7, 11, 4]; // 6ª → 1ª corda
+
+      // Tipi di scala pentatonica
+      var SCALE_TYPES = {
+        minor: {
+          name: "Pentatonica minore",
+          intervals: [0, 3, 5, 7, 10],  // 1, ♭3, 4, 5, ♭7
+          degrees: ["1", "♭3", "4", "5", "♭7"]
+        },
+        major: {
+          name: "Pentatonica maggiore",
+          intervals: [0, 2, 4, 7, 9],   // 1, 2, 3, 5, 6
+          degrees: ["1", "2", "3", "5", "6"]
+        }
+      };
+
+      // Riferimenti DOM (li riempiamo dopo il DOMContentLoaded)
+      var rootSelect,
+        typeSelect,
+        majorModeSelect,
+        viewModeSelect,
+        boxSelect,
+        notationSelect,
+        fretboardEl,
+        scaleLabelEl,
+        scaleDescEl,
+        scaleNotesEl,
+        boxInfoEl;
+
+      function initDomRefs() {
+        rootSelect      = document.getElementById("rootSelect");
+        typeSelect      = document.getElementById("typeSelect");
+        majorModeSelect = document.getElementById("majorModeSelect");
+        viewModeSelect  = document.getElementById("viewModeSelect");
+        boxSelect       = document.getElementById("boxSelect");
+        notationSelect  = document.getElementById("notationSelect");
+        fretboardEl     = document.getElementById("fretboard");
+        scaleLabelEl    = document.getElementById("scaleLabel");
+        scaleDescEl     = document.getElementById("scaleDescription");
+        scaleNotesEl    = document.getElementById("scaleNotes");
+        boxInfoEl       = document.getElementById("boxInfo");
+      }
+
+      // Popola select della nota fondamentale
+      function initRootSelect() {
+        if (!rootSelect) return;
+        rootSelect.innerHTML = ""; // pulizia di sicurezza
+        var i;
+        for (i = 0; i < 12; i++) {
+          var opt = document.createElement("option");
+          opt.value = i;
+          opt.textContent = EN_NOTES[i] + " (" + IT_NOTES[i] + ")";
+          rootSelect.appendChild(opt);
+        }
+        // Default: A (La)
+        rootSelect.value = "9";
+      }
+
+      // Restituisce etichetta della nota secondo la notazione scelta
+      function getNoteLabel(noteIndex, notationMode) {
+        var en = EN_NOTES[noteIndex];
+        var it = IT_NOTES[noteIndex];
+        if (notationMode === "en") {
+          return en;
+        } else if (notationMode === "it") {
+          return it;
+        } else if (notationMode === "both") {
+          return en + " / " + it;
+        }
+        return en;
+      }
+
+      // Calcola le note della scala a partire dalla tonica e dal tipo
+      function getScale(rootIndex, typeKey) {
+        var type = SCALE_TYPES[typeKey];
+        var noteIndices = [];
+        var i;
+        for (i = 0; i < type.intervals.length; i++) {
+          noteIndices.push((rootIndex + type.intervals[i]) % 12);
+        }
+        return { type: type, noteIndices: noteIndices };
+      }
+
+      // Grado della scala (1, ♭3, ecc.) per una nota specifica (o null se fuori scala)
+      function getDegreeForNote(noteIndex, rootIndex, typeKey) {
+        var type = SCALE_TYPES[typeKey];
+        var diff = (noteIndex - rootIndex + 12) % 12;
+        var i;
+        for (i = 0; i < type.intervals.length; i++) {
+          if (type.intervals[i] === diff) {
+            return type.degrees[i];
+          }
+        }
+        return null;
+      }
+
+      // Trova il tasto (0–12) in cui una nota appare sulla 5ª corda (riferimento CAGED)
+      function getRootFretOnFifthString(rootIndex) {
+        var stringIndex = 1; // 5ª corda (A)
+        var fret;
+        for (fret = 0; fret <= 12; fret++) {
+          var noteIndex = (TUNING[stringIndex] + fret) % 12;
+          if (noteIndex === rootIndex) {
+            return fret;
+          }
+        }
+        return 0; // fallback
+      }
+
+      // Calcola intervallo di tasti per un dato box (1–5) rispetto alla radice su 5ª corda
+      // secondo la sequenza di tasti del PDF: 3, 5, 8, 10, 12 -> offset 0, +2, +5, +7, +9
+      function getBoxRange(spatialRootIndex, boxNumber) {
+        var baseFret5 = getRootFretOnFifthString(spatialRootIndex);
+        var offsets = [0, 2, 5, 7, 9]; // Box1–Box5 rispetto alla radice su 5ª corda
+        var center = baseFret5 + offsets[boxNumber - 1];
+
+        var start = center - 2;
+        var end = center + 2;
+
+        if (start < 0) {
+          start = 0;
+        }
+        if (end > 12) {
+          end = 12;
+          start = Math.max(0, end - 4);
+        }
+
+        return { start: start, end: end, centerFret: center, baseFret5: baseFret5 };
+      }
+
+      // Disegna il manico
+      // displayRootIndex = tonica teorica (es. C maggiore)
+      // spatialRootIndex = radice usata per ancorare il box (es. relativa minore A)
+      function renderFretboard(displayRootIndex, spatialRootIndex, typeKey, viewMode, boxNumber, notationMode) {
+        if (!fretboardEl) return;
+
+        var scaleObj = getScale(displayRootIndex, typeKey);
+        var noteIndices = scaleObj.noteIndices;
+
+        var numFrets = 12;
+        var useBoxes = (viewMode === "boxes");
+        var boxRange = useBoxes ? getBoxRange(spatialRootIndex, boxNumber) : null;
+
+        // In modalità box, selezioniamo max 2 note per corda nel range del box
+        var allowedFretsPerString = null;
+        var s, fret, noteIndex, inScale;
+
+        if (useBoxes && boxRange) {
+          allowedFretsPerString = [];
+          var start = boxRange.start;
+          var end = boxRange.end;
+
+          for (s = 0; s < 6; s++) {
+            var fretsInBox = [];
+            for (fret = start; fret <= end; fret++) {
+              noteIndex = (TUNING[s] + fret) % 12;
+              inScale = noteIndices.indexOf(noteIndex) !== -1;
+              if (inScale) {
+                fretsInBox.push(fret);
+              }
+            }
+            fretsInBox.sort(function (a, b) { return a - b; });
+            var limited = fretsInBox.slice(0, 2); // max due note per corda
+            allowedFretsPerString[s] = {};
+            var j;
+            for (j = 0; j < limited.length; j++) {
+              allowedFretsPerString[s][limited[j]] = true;
+            }
+          }
+        }
+
+        // Pulisci tabella
+        fretboardEl.innerHTML = "";
+
+        // Header tasti
+        var headerRow = document.createElement("tr");
+        var cornerTh = document.createElement("th");
+        cornerTh.textContent = "";
+        headerRow.appendChild(cornerTh);
+
+        for (fret = 0; fret <= numFrets; fret++) {
+          var th = document.createElement("th");
+          th.textContent = fret;
+          headerRow.appendChild(th);
+        }
+        fretboardEl.appendChild(headerRow);
+
+        // Corde: dalla 1ª alla 6ª (indice interno 5→0)
+        for (s = 5; s >= 0; s--) {
+          var row = document.createElement("tr");
+
+          var labelCell = document.createElement("td");
+          labelCell.className = "string-label";
+          labelCell.textContent = getNoteLabel(TUNING[s], notationMode);
+          row.appendChild(labelCell);
+
+          for (fret = 0; fret <= numFrets; fret++) {
+            var cell = document.createElement("td");
+            cell.className = "note-cell";
+
+            noteIndex = (TUNING[s] + fret) % 12;
+            var degree = getDegreeForNote(noteIndex, displayRootIndex, typeKey);
+            var label = getNoteLabel(noteIndex, notationMode);
+
+            var span = document.createElement("span");
+            span.className = "note-name";
+            span.textContent = label;
+
+            inScale = noteIndices.indexOf(noteIndex) !== -1;
+            var isRoot = (noteIndex === displayRootIndex);
+
+            if (!useBoxes) {
+              // Manico intero
+              if (isRoot) {
+                cell.classList.add("root-note");
+              } else if (inScale) {
+                cell.classList.add("in-scale");
+              }
+            } else {
+              start = boxRange.start;
+              end = boxRange.end;
+              var allowedSet = allowedFretsPerString[s];
+
+              if (
+                fret >= start &&
+                fret <= end &&
+                inScale &&
+                allowedSet &&
+                allowedSet[fret]
+              ) {
+                if (isRoot) {
+                  cell.classList.add("root-note");
+                } else {
+                  cell.classList.add("in-scale");
+                }
+              }
+            }
+
+            if (degree) {
+              var br = document.createElement("br");
+              var degSpan = document.createElement("span");
+              degSpan.className = "note-degree";
+              degSpan.textContent = degree;
+              span.appendChild(br);
+              span.appendChild(degSpan);
+            }
+
+            cell.appendChild(span);
+            row.appendChild(cell);
+          }
+
+          fretboardEl.appendChild(row);
+        }
+      }
+
+      // Aggiorna info testuali sulla scala
+      function updateInfo(displayRootIndex, spatialRootIndex, typeKey, notationMode, viewMode, boxNumber) {
+        if (!scaleLabelEl || !scaleDescEl || !scaleNotesEl || !boxInfoEl) return;
+
+        var scaleObj = getScale(displayRootIndex, typeKey);
+        var type = scaleObj.type;
+        var noteIndices = scaleObj.noteIndices;
+
+        var rootLabelEn = EN_NOTES[displayRootIndex];
+        var rootLabelIt = IT_NOTES[displayRootIndex];
+        var rootDisplay;
+
+        if (notationMode === "en") {
+          rootDisplay = rootLabelEn;
+        } else if (notationMode === "it") {
+          rootDisplay = rootLabelIt;
+        } else if (notationMode === "both") {
+          rootDisplay = rootLabelEn + " / " + rootLabelIt;
+        } else {
+          rootDisplay = rootLabelEn;
+        }
+
+        scaleLabelEl.textContent = type.name + " di " + rootDisplay;
+
+        // Descrizione intervalli
+        scaleDescEl.textContent =
+          type.name + " su " + rootDisplay + ": gradi " + type.degrees.join(" – ") +
+          " (in semitoni dalla tonica: " + type.intervals.join(", ") + ").";
+
+        // Note della scala
+        scaleNotesEl.innerHTML = "";
+        var i;
+        for (i = 0; i < noteIndices.length; i++) {
+          var noteIndex = noteIndices[i];
+          var chip = document.createElement("span");
+          var noteLabel = getNoteLabel(noteIndex, notationMode);
+          if (i === 0) {
+            chip.textContent = noteLabel + " (1)";
+          } else {
+            chip.textContent = noteLabel;
+          }
+          scaleNotesEl.appendChild(chip);
+        }
+
+        // Info box
+        var majorMode = majorModeSelect ? majorModeSelect.value : "relative";
+        if (viewMode === "boxes") {
+          var boxRange = getBoxRange(spatialRootIndex, boxNumber);
+          var start = boxRange.start;
+          var end = boxRange.end;
+          var centerFret = boxRange.centerFret;
+          var baseFret5 = boxRange.baseFret5;
+          var spatialRootLabel = getNoteLabel(spatialRootIndex, notationMode);
+
+          var extra;
+          if (typeKey === "major" && majorMode === "relative") {
+            extra = " (box costruito sulla relativa minore " + spatialRootLabel +
+              " sulla 5ª corda, ma con tonica teorica " + rootDisplay + ").";
+          } else {
+            extra = " (box costruito sulla tonica " + spatialRootLabel +
+              " sulla 5ª corda).";
+          }
+
+          boxInfoEl.textContent =
+            "Box " + boxNumber +
+            ": note della scala tra i tasti " + start + " e " + end +
+            " circa centrato al tasto " + centerFret +
+            " (radice sulla 5ª corda al tasto " + baseFret5 + ")" +
+            extra;
+        } else {
+          boxInfoEl.textContent =
+            "Manico intero: tutte le note della scala sono evidenziate su 13 tasti (0–12).";
+        }
+      }
+
+      function updateBoxSelectState() {
+        if (!viewModeSelect || !boxSelect) return;
+        var viewMode = viewModeSelect.value;
+        boxSelect.disabled = (viewMode !== "boxes");
+      }
+
+      function updateMajorModeSelectState() {
+        if (!typeSelect || !majorModeSelect) return;
+        var typeKey = typeSelect.value;
+        majorModeSelect.disabled = (typeKey !== "major");
+      }
+
+      function updateAll() {
+        if (!rootSelect || !typeSelect || !viewModeSelect || !notationSelect || !boxSelect) return;
+
+        var displayRootIndex = parseInt(rootSelect.value, 10);
+        var typeKey = typeSelect.value;
+        var viewMode = viewModeSelect.value;
+        var boxNumber = parseInt(boxSelect.value, 10);
+        var notationMode = notationSelect.value;
+        var majorMode = majorModeSelect ? majorModeSelect.value : "relative";
+
+        // Radice "spaziale" per ancorare i box
+        var spatialRootIndex = displayRootIndex;
+
+        if (typeKey === "major") {
+          if (majorMode === "relative") {
+            // relativa minore: 3 semitoni sotto
+            spatialRootIndex = (displayRootIndex + 9) % 12;
+          } else {
+            // maggiore reale: stesso root
+            spatialRootIndex = displayRootIndex;
+          }
+        }
+
+        updateBoxSelectState();
+        updateMajorModeSelectState();
+        updateInfo(displayRootIndex, spatialRootIndex, typeKey, notationMode, viewMode, boxNumber);
+        renderFretboard(displayRootIndex, spatialRootIndex, typeKey, viewMode, boxNumber, notationMode);
+      }
+
+      function safeInit() {
+        initDomRefs();
+        if (!rootSelect) {
+          // se arriviamo qui, il DOM non corrisponde all'HTML previsto
+          return;
+        }
+        initRootSelect();
+        updateAll();
+
+        // Event listeners
+        rootSelect.addEventListener("change", updateAll);
+        typeSelect.addEventListener("change", updateAll);
+        if (majorModeSelect) {
+          majorModeSelect.addEventListener("change", updateAll);
+        }
+        viewModeSelect.addEventListener("change", updateAll);
+        boxSelect.addEventListener("change", updateAll);
+        notationSelect.addEventListener("change", updateAll);
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", safeInit);
+      } else {
+        safeInit();
+      }
+    })();
+  </script>
+</body>
+</html>
