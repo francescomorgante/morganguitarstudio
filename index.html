@@ -460,412 +460,490 @@
     </div>
   </div>
 
-  <script>
-      (function () {
-      // Notazione anglosassone e italiana
-      var EN_NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-      var IT_NOTES = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"];
+<script>
+  (function () {
+    // =========================
+    // DATI DI BASE
+    // =========================
 
-      // Tuning chitarra standard dal basso verso l'alto: E A D G B E
-      // Indici rispetto a C=0
-      var TUNING = [4, 9, 2, 7, 11, 4]; // 6ª → 1ª corda
+    // Notazione anglosassone e italiana
+    var EN_NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    var IT_NOTES = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"];
 
-      // Tipi di scala pentatonica
-      var SCALE_TYPES = {
-        minor: {
-          name: "Pentatonica minore",
-          intervals: [0, 3, 5, 7, 10],  // 1, ♭3, 4, 5, ♭7
-          degrees: ["1", "♭3", "4", "5", "♭7"]
-        },
-        major: {
-          name: "Pentatonica maggiore",
-          intervals: [0, 2, 4, 7, 9],   // 1, 2, 3, 5, 6
-          degrees: ["1", "2", "3", "5", "6"]
-        }
-      };
+    // Tuning chitarra standard dal basso verso l'alto: E A D G B E
+    // Indici rispetto a C=0
+    // Indice 0 = 6ª corda (E bassa), 5 = 1ª corda (E cantino)
+    var TUNING = [4, 9, 2, 7, 11, 4];
 
-      // Riferimenti DOM (li riempiamo dopo il DOMContentLoaded)
-      var rootSelect,
-        typeSelect,
-        majorModeSelect,
-        viewModeSelect,
-        boxSelect,
-        notationSelect,
-        fretboardEl,
-        scaleLabelEl,
-        scaleDescEl,
-        scaleNotesEl,
-        boxInfoEl;
-
-      function initDomRefs() {
-        rootSelect      = document.getElementById("rootSelect");
-        typeSelect      = document.getElementById("typeSelect");
-        majorModeSelect = document.getElementById("majorModeSelect");
-        viewModeSelect  = document.getElementById("viewModeSelect");
-        boxSelect       = document.getElementById("boxSelect");
-        notationSelect  = document.getElementById("notationSelect");
-        fretboardEl     = document.getElementById("fretboard");
-        scaleLabelEl    = document.getElementById("scaleLabel");
-        scaleDescEl     = document.getElementById("scaleDescription");
-        scaleNotesEl    = document.getElementById("scaleNotes");
-        boxInfoEl       = document.getElementById("boxInfo");
+    // Tipi di scala pentatonica
+    var SCALE_TYPES = {
+      minor: {
+        name: "Pentatonica minore",
+        intervals: [0, 3, 5, 7, 10],  // 1, ♭3, 4, 5, ♭7
+        degrees: ["1", "♭3", "4", "5", "♭7"]
+      },
+      major: {
+        name: "Pentatonica maggiore",
+        intervals: [0, 2, 4, 7, 9],   // 1, 2, 3, 5, 6
+        degrees: ["1", "2", "3", "5", "6"]
       }
+    };
 
-      // Popola select della nota fondamentale
-      function initRootSelect() {
-        if (!rootSelect) return;
-        rootSelect.innerHTML = ""; // pulizia di sicurezza
-        var i;
-        for (i = 0; i < 12; i++) {
-          var opt = document.createElement("option");
-          opt.value = i;
-          opt.textContent = EN_NOTES[i] + " (" + IT_NOTES[i] + ")";
-          rootSelect.appendChild(opt);
-        }
-        // Default: A (La)
-        rootSelect.value = "9";
+    // BOX PENTATONICI MINORI DI A (La) – come indicati da te
+    // Chiave: box "1"–"5"; valore: frets per corda (6→1)
+    var BOX_PATTERNS_MINOR = {
+      "1": { // A min box 1
+        6: [5, 8],
+        5: [5, 7],
+        4: [5, 7],
+        3: [5, 7],
+        2: [5, 8],
+        1: [5, 8]
+      },
+      "2": { // A min box 2
+        6: [8, 10],
+        5: [7, 10],
+        4: [7, 10],
+        3: [7, 9],
+        2: [8, 10],
+        1: [8, 10]
+      },
+      "3": { // A min box 3
+        6: [10, 12],
+        5: [10, 12],
+        4: [10, 12],
+        3: [9, 12],
+        2: [10, 13],
+        1: [10, 12]
+      },
+      "4": { // A min box 4
+        6: [12, 15],
+        5: [12, 15],
+        4: [12, 14],
+        3: [12, 14],
+        2: [13, 15],
+        1: [12, 15]
+      },
+      "5": { // A min box 5
+        6: [15, 17],
+        5: [15, 17],
+        4: [14, 17],
+        3: [14, 17],
+        2: [15, 17],
+        1: [15, 17]
       }
+    };
 
-      // Restituisce etichetta della nota secondo la notazione scelta
-      function getNoteLabel(noteIndex, notationMode) {
-        var en = EN_NOTES[noteIndex];
-        var it = IT_NOTES[noteIndex];
-        if (notationMode === "en") {
-          return en;
-        } else if (notationMode === "it") {
-          return it;
-        } else if (notationMode === "both") {
-          return en + " / " + it;
-        }
+    var BASE_MINOR_ROOT_INDEX = 9; // A
+    // =========================
+    // RIFERIMENTI DOM
+    // =========================
+
+    var rootSelect,
+      typeSelect,
+      majorModeSelect,
+      viewModeSelect,
+      boxSelect,
+      notationSelect,
+      fretCountSelect,
+      fretboardEl,
+      scaleLabelEl,
+      scaleDescEl,
+      scaleNotesEl,
+      boxInfoEl;
+
+    function initDomRefs() {
+      rootSelect      = document.getElementById("rootSelect");
+      typeSelect      = document.getElementById("typeSelect");
+      majorModeSelect = document.getElementById("majorModeSelect");
+      viewModeSelect  = document.getElementById("viewModeSelect");
+      boxSelect       = document.getElementById("boxSelect");
+      notationSelect  = document.getElementById("notationSelect");
+      fretCountSelect = document.getElementById("fretCountSelect");
+      fretboardEl     = document.getElementById("fretboard");
+      scaleLabelEl    = document.getElementById("scaleLabel");
+      scaleDescEl     = document.getElementById("scaleDescription");
+      scaleNotesEl    = document.getElementById("scaleNotes");
+      boxInfoEl       = document.getElementById("boxInfo");
+    }
+
+    // =========================
+    // FUNZIONI UTILI
+    // =========================
+
+    // Popola select della nota fondamentale
+    function initRootSelect() {
+      if (!rootSelect) return;
+      rootSelect.innerHTML = "";
+      var i;
+      for (i = 0; i < 12; i++) {
+        var opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = EN_NOTES[i] + " (" + IT_NOTES[i] + ")";
+        rootSelect.appendChild(opt);
+      }
+      // Default: A (La)
+      rootSelect.value = "9";
+    }
+
+    // Etichetta nota secondo notazione
+    function getNoteLabel(noteIndex, notationMode) {
+      var en = EN_NOTES[noteIndex];
+      var it = IT_NOTES[noteIndex];
+      if (notationMode === "en") {
         return en;
+      } else if (notationMode === "it") {
+        return it;
+      } else if (notationMode === "both") {
+        return en + " / " + it;
       }
+      return en;
+    }
 
-      // Calcola le note della scala a partire dalla tonica e dal tipo
-      function getScale(rootIndex, typeKey) {
-        var type = SCALE_TYPES[typeKey];
-        var noteIndices = [];
+    // Scala da tonica e tipo
+    function getScale(rootIndex, typeKey) {
+      var type = SCALE_TYPES[typeKey];
+      var noteIndices = [];
+      var i;
+      for (i = 0; i < type.intervals.length; i++) {
+        noteIndices.push((rootIndex + type.intervals[i]) % 12);
+      }
+      return { type: type, noteIndices: noteIndices };
+    }
+
+    // Grado (1, ♭3, ecc.) per nota specifica
+    function getDegreeForNote(noteIndex, rootIndex, typeKey) {
+      var type = SCALE_TYPES[typeKey];
+      var diff = (noteIndex - rootIndex + 12) % 12;
+      var i;
+      for (i = 0; i < type.intervals.length; i++) {
+        if (type.intervals[i] === diff) {
+          return type.degrees[i];
+        }
+      }
+      return null;
+    }
+
+    // Fret della radice su 6ª corda (E bassa), 0–24
+    function getRootFretOnSixthString(rootIndex) {
+      var stringIndex = 0; // 6ª corda
+      var fret;
+      for (fret = 0; fret <= 24; fret++) {
+        var noteIndex = (TUNING[stringIndex] + fret) % 12;
+        if (noteIndex === rootIndex) {
+          return fret;
+        }
+      }
+      return 0;
+    }
+
+    // Trasposizione di un box minore (definito per A) su un'altra radice (spatialRootIndex)
+    function getTransposedBoxFrets(spatialRootIndex, boxNumber) {
+      var boxKey = String(boxNumber);
+      var baseBox = BOX_PATTERNS_MINOR[boxKey];
+      if (!baseBox) return null;
+
+      var baseRootFret6 = getRootFretOnSixthString(BASE_MINOR_ROOT_INDEX); // A su 6ª
+      var targetRootFret6 = getRootFretOnSixthString(spatialRootIndex);
+      var delta = targetRootFret6 - baseRootFret6;
+
+      var perString = {};
+      var minFret = null;
+      var maxFret = null;
+
+      var stringNum;
+      for (stringNum in baseBox) {
+        if (!baseBox.hasOwnProperty(stringNum)) continue;
+        var frets = baseBox[stringNum];
+        var newFrets = [];
         var i;
-        for (i = 0; i < type.intervals.length; i++) {
-          noteIndices.push((rootIndex + type.intervals[i]) % 12);
+        for (i = 0; i < frets.length; i++) {
+          var nf = frets[i] + delta;
+          newFrets.push(nf);
+          if (minFret === null || nf < minFret) minFret = nf;
+          if (maxFret === null || nf > maxFret) maxFret = nf;
         }
-        return { type: type, noteIndices: noteIndices };
+        perString[stringNum] = newFrets;
       }
 
-      // Grado della scala (1, ♭3, ecc.) per una nota specifica (o null se fuori scala)
-      function getDegreeForNote(noteIndex, rootIndex, typeKey) {
-        var type = SCALE_TYPES[typeKey];
-        var diff = (noteIndex - rootIndex + 12) % 12;
-        var i;
-        for (i = 0; i < type.intervals.length; i++) {
-          if (type.intervals[i] === diff) {
-            return type.degrees[i];
-          }
-        }
-        return null;
+      return { perString: perString, minFret: minFret, maxFret: maxFret };
+    }
+
+    // =========================
+    // RENDER MANICO
+    // =========================
+
+    // displayRootIndex = tonica teorica (es. C maggiore)
+    // spatialRootIndex = radice usata per ancorare i box (es. relativa minore A)
+    function renderFretboard(displayRootIndex, spatialRootIndex, typeKey, viewMode, boxNumber, notationMode, maxFrets) {
+      if (!fretboardEl) return;
+
+      var scaleObj = getScale(displayRootIndex, typeKey);
+      var noteIndices = scaleObj.noteIndices;
+
+      var numFrets = maxFrets || 12;
+      var useBoxes = (viewMode === "boxes");
+      var boxData = null;
+      if (useBoxes) {
+        boxData = getTransposedBoxFrets(spatialRootIndex, boxNumber);
       }
 
-      // Trova il tasto (0–12) in cui una nota appare sulla 5ª corda (riferimento CAGED)
-      function getRootFretOnFifthString(rootIndex) {
-        var stringIndex = 1; // 5ª corda (A)
-        var fret;
-        for (fret = 0; fret <= 12; fret++) {
-          var noteIndex = (TUNING[stringIndex] + fret) % 12;
-          if (noteIndex === rootIndex) {
-            return fret;
-          }
-        }
-        return 0; // fallback
+      // Pulisci tabella
+      fretboardEl.innerHTML = "";
+
+      // Header tasti
+      var headerRow = document.createElement("tr");
+      var cornerTh = document.createElement("th");
+      cornerTh.textContent = "";
+      headerRow.appendChild(cornerTh);
+
+      var fret;
+      for (fret = 0; fret <= numFrets; fret++) {
+        var th = document.createElement("th");
+        th.textContent = fret;
+        headerRow.appendChild(th);
       }
+      fretboardEl.appendChild(headerRow);
 
-      // Calcola intervallo di tasti per un dato box (1–5) rispetto alla radice su 5ª corda
-      // secondo la sequenza di tasti del PDF: 3, 5, 8, 10, 12 -> offset 0, +2, +5, +7, +9
-      function getBoxRange(spatialRootIndex, boxNumber) {
-        var baseFret5 = getRootFretOnFifthString(spatialRootIndex);
-        var offsets = [0, 2, 5, 7, 9]; // Box1–Box5 rispetto alla radice su 5ª corda
-        var center = baseFret5 + offsets[boxNumber - 1];
+      // Corde: dalla 1ª alla 6ª (indice interno 5→0)
+      var s;
+      for (s = 5; s >= 0; s--) {
+        var row = document.createElement("tr");
 
-        var start = center - 2;
-        var end = center + 2;
-
-        if (start < 0) {
-          start = 0;
-        }
-        if (end > 12) {
-          end = 12;
-          start = Math.max(0, end - 4);
-        }
-
-        return { start: start, end: end, centerFret: center, baseFret5: baseFret5 };
-      }
-
-      // Disegna il manico
-      // displayRootIndex = tonica teorica (es. C maggiore)
-      // spatialRootIndex = radice usata per ancorare il box (es. relativa minore A)
-      function renderFretboard(displayRootIndex, spatialRootIndex, typeKey, viewMode, boxNumber, notationMode) {
-        if (!fretboardEl) return;
-
-        var scaleObj = getScale(displayRootIndex, typeKey);
-        var noteIndices = scaleObj.noteIndices;
-
-        var numFrets = 12;
-        var useBoxes = (viewMode === "boxes");
-        var boxRange = useBoxes ? getBoxRange(spatialRootIndex, boxNumber) : null;
-
-        // In modalità box, selezioniamo max 2 note per corda nel range del box
-        var allowedFretsPerString = null;
-        var s, fret, noteIndex, inScale;
-
-        if (useBoxes && boxRange) {
-          allowedFretsPerString = [];
-          var start = boxRange.start;
-          var end = boxRange.end;
-
-          for (s = 0; s < 6; s++) {
-            var fretsInBox = [];
-            for (fret = start; fret <= end; fret++) {
-              noteIndex = (TUNING[s] + fret) % 12;
-              inScale = noteIndices.indexOf(noteIndex) !== -1;
-              if (inScale) {
-                fretsInBox.push(fret);
-              }
-            }
-            fretsInBox.sort(function (a, b) { return a - b; });
-            var limited = fretsInBox.slice(0, 2); // max due note per corda
-            allowedFretsPerString[s] = {};
-            var j;
-            for (j = 0; j < limited.length; j++) {
-              allowedFretsPerString[s][limited[j]] = true;
-            }
-          }
-        }
-
-        // Pulisci tabella
-        fretboardEl.innerHTML = "";
-
-        // Header tasti
-        var headerRow = document.createElement("tr");
-        var cornerTh = document.createElement("th");
-        cornerTh.textContent = "";
-        headerRow.appendChild(cornerTh);
+        var stringLabelCell = document.createElement("td");
+        stringLabelCell.className = "string-label";
+        stringLabelCell.textContent = getNoteLabel(TUNING[s], notationMode);
+        row.appendChild(stringLabelCell);
 
         for (fret = 0; fret <= numFrets; fret++) {
-          var th = document.createElement("th");
-          th.textContent = fret;
-          headerRow.appendChild(th);
-        }
-        fretboardEl.appendChild(headerRow);
+          var cell = document.createElement("td");
+          cell.className = "note-cell";
 
-        // Corde: dalla 1ª alla 6ª (indice interno 5→0)
-        for (s = 5; s >= 0; s--) {
-          var row = document.createElement("tr");
+          var noteIndex = (TUNING[s] + fret) % 12;
+          var degree = getDegreeForNote(noteIndex, displayRootIndex, typeKey);
+          var label = getNoteLabel(noteIndex, notationMode);
 
-          var labelCell = document.createElement("td");
-          labelCell.className = "string-label";
-          labelCell.textContent = getNoteLabel(TUNING[s], notationMode);
-          row.appendChild(labelCell);
+          var span = document.createElement("span");
+          span.className = "note-name";
+          span.textContent = label;
 
-          for (fret = 0; fret <= numFrets; fret++) {
-            var cell = document.createElement("td");
-            cell.className = "note-cell";
+          var inScale = noteIndices.indexOf(noteIndex) !== -1;
+          var isRoot = (noteIndex === displayRootIndex);
 
-            noteIndex = (TUNING[s] + fret) % 12;
-            var degree = getDegreeForNote(noteIndex, displayRootIndex, typeKey);
-            var label = getNoteLabel(noteIndex, notationMode);
-
-            var span = document.createElement("span");
-            span.className = "note-name";
-            span.textContent = label;
-
-            inScale = noteIndices.indexOf(noteIndex) !== -1;
-            var isRoot = (noteIndex === displayRootIndex);
-
-            if (!useBoxes) {
-              // Manico intero
-              if (isRoot) {
-                cell.classList.add("root-note");
-              } else if (inScale) {
-                cell.classList.add("in-scale");
-              }
-            } else {
-              start = boxRange.start;
-              end = boxRange.end;
-              var allowedSet = allowedFretsPerString[s];
-
-              if (
-                fret >= start &&
-                fret <= end &&
-                inScale &&
-                allowedSet &&
-                allowedSet[fret]
-              ) {
-                if (isRoot) {
-                  cell.classList.add("root-note");
-                } else {
-                  cell.classList.add("in-scale");
+          if (!useBoxes) {
+            // MANICO INTERO
+            if (isRoot) {
+              cell.classList.add("root-note");
+            } else if (inScale) {
+              cell.classList.add("in-scale");
+            }
+          } else if (boxData && boxData.perString) {
+            // BOX CAGED – usa solo i frets definiti nel pattern trasposto
+            var stringNum = 6 - s; // 6ª corda (s=0) → 6; 1ª corda (s=5) → 1
+            var allowedArray = boxData.perString[stringNum];
+            var isInBox = false;
+            if (allowedArray) {
+              var i;
+              for (i = 0; i < allowedArray.length; i++) {
+                if (allowedArray[i] === fret) {
+                  isInBox = true;
+                  break;
                 }
               }
             }
 
-            if (degree) {
-              var br = document.createElement("br");
-              var degSpan = document.createElement("span");
-              degSpan.className = "note-degree";
-              degSpan.textContent = degree;
-              span.appendChild(br);
-              span.appendChild(degSpan);
+            if (isInBox && inScale) {
+              if (isRoot) {
+                cell.classList.add("root-note");
+              } else {
+                cell.classList.add("in-scale");
+              }
             }
-
-            cell.appendChild(span);
-            row.appendChild(cell);
           }
 
-          fretboardEl.appendChild(row);
+          if (degree) {
+            var br = document.createElement("br");
+            var degSpan = document.createElement("span");
+            degSpan.className = "note-degree";
+            degSpan.textContent = degree;
+            span.appendChild(br);
+            span.appendChild(degSpan);
+          }
+
+          cell.appendChild(span);
+          row.appendChild(cell);
         }
+
+        fretboardEl.appendChild(row);
+      }
+    }
+
+    // =========================
+    // INFO TESTUALI
+    // =========================
+
+    function updateInfo(displayRootIndex, spatialRootIndex, typeKey, notationMode, viewMode, boxNumber, maxFrets) {
+      if (!scaleLabelEl || !scaleDescEl || !scaleNotesEl || !boxInfoEl) return;
+
+      var scaleObj = getScale(displayRootIndex, typeKey);
+      var type = scaleObj.type;
+      var noteIndices = scaleObj.noteIndices;
+
+      var rootLabelEn = EN_NOTES[displayRootIndex];
+      var rootLabelIt = IT_NOTES[displayRootIndex];
+      var rootDisplay;
+
+      if (notationMode === "en") {
+        rootDisplay = rootLabelEn;
+      } else if (notationMode === "it") {
+        rootDisplay = rootLabelIt;
+      } else if (notationMode === "both") {
+        rootDisplay = rootLabelEn + " / " + rootLabelIt;
+      } else {
+        rootDisplay = rootLabelEn;
       }
 
-      // Aggiorna info testuali sulla scala
-      function updateInfo(displayRootIndex, spatialRootIndex, typeKey, notationMode, viewMode, boxNumber) {
-        if (!scaleLabelEl || !scaleDescEl || !scaleNotesEl || !boxInfoEl) return;
+      scaleLabelEl.textContent = type.name + " di " + rootDisplay;
 
-        var scaleObj = getScale(displayRootIndex, typeKey);
-        var type = scaleObj.type;
-        var noteIndices = scaleObj.noteIndices;
+      // Descrizione intervalli
+      scaleDescEl.textContent =
+        type.name + " su " + rootDisplay + ": gradi " + type.degrees.join(" – ") +
+        " (in semitoni dalla tonica: " + type.intervals.join(", ") + ").";
 
-        var rootLabelEn = EN_NOTES[displayRootIndex];
-        var rootLabelIt = IT_NOTES[displayRootIndex];
-        var rootDisplay;
-
-        if (notationMode === "en") {
-          rootDisplay = rootLabelEn;
-        } else if (notationMode === "it") {
-          rootDisplay = rootLabelIt;
-        } else if (notationMode === "both") {
-          rootDisplay = rootLabelEn + " / " + rootLabelIt;
+      // Note della scala
+      scaleNotesEl.innerHTML = "";
+      var i;
+      for (i = 0; i < noteIndices.length; i++) {
+        var noteIndex = noteIndices[i];
+        var chip = document.createElement("span");
+        var noteLabel = getNoteLabel(noteIndex, notationMode);
+        if (i === 0) {
+          chip.textContent = noteLabel + " (1)";
         } else {
-          rootDisplay = rootLabelEn;
+          chip.textContent = noteLabel;
         }
+        scaleNotesEl.appendChild(chip);
+      }
 
-        scaleLabelEl.textContent = type.name + " di " + rootDisplay;
+      // Info box / manico intero
+      var majorMode = majorModeSelect ? majorModeSelect.value : "relative";
+      var fretInfo = maxFrets || 12;
 
-        // Descrizione intervalli
-        scaleDescEl.textContent =
-          type.name + " su " + rootDisplay + ": gradi " + type.degrees.join(" – ") +
-          " (in semitoni dalla tonica: " + type.intervals.join(", ") + ").";
+      if (viewMode === "boxes") {
+        var boxData = getTransposedBoxFrets(spatialRootIndex, boxNumber);
+        if (boxData) {
+          var minF = boxData.minFret;
+          var maxF = boxData.maxFret;
+          // clamp ai tasti visibili
+          if (minF < 0) minF = 0;
+          if (maxF > fretInfo) maxF = fretInfo;
 
-        // Note della scala
-        scaleNotesEl.innerHTML = "";
-        var i;
-        for (i = 0; i < noteIndices.length; i++) {
-          var noteIndex = noteIndices[i];
-          var chip = document.createElement("span");
-          var noteLabel = getNoteLabel(noteIndex, notationMode);
-          if (i === 0) {
-            chip.textContent = noteLabel + " (1)";
-          } else {
-            chip.textContent = noteLabel;
-          }
-          scaleNotesEl.appendChild(chip);
-        }
-
-        // Info box
-        var majorMode = majorModeSelect ? majorModeSelect.value : "relative";
-        if (viewMode === "boxes") {
-          var boxRange = getBoxRange(spatialRootIndex, boxNumber);
-          var start = boxRange.start;
-          var end = boxRange.end;
-          var centerFret = boxRange.centerFret;
-          var baseFret5 = boxRange.baseFret5;
           var spatialRootLabel = getNoteLabel(spatialRootIndex, notationMode);
-
           var extra;
           if (typeKey === "major" && majorMode === "relative") {
             extra = " (box costruito sulla relativa minore " + spatialRootLabel +
-              " sulla 5ª corda, ma con tonica teorica " + rootDisplay + ").";
+              " sulla 6ª corda, ma con tonica teorica " + rootDisplay + ").";
           } else {
             extra = " (box costruito sulla tonica " + spatialRootLabel +
-              " sulla 5ª corda).";
+              " sulla 6ª corda).";
           }
 
           boxInfoEl.textContent =
             "Box " + boxNumber +
-            ": note della scala tra i tasti " + start + " e " + end +
-            " circa centrato al tasto " + centerFret +
-            " (radice sulla 5ª corda al tasto " + baseFret5 + ")" +
+            ": note della scala tra i tasti " + minF + " e " + maxF +
+            " (visualizzazione fino al tasto " + fretInfo + ")" +
             extra;
         } else {
-          boxInfoEl.textContent =
-            "Manico intero: tutte le note della scala sono evidenziate su 13 tasti (0–12).";
+          boxInfoEl.textContent = "Box non disponibile per questa combinazione.";
         }
-      }
-
-      function updateBoxSelectState() {
-        if (!viewModeSelect || !boxSelect) return;
-        var viewMode = viewModeSelect.value;
-        boxSelect.disabled = (viewMode !== "boxes");
-      }
-
-      function updateMajorModeSelectState() {
-        if (!typeSelect || !majorModeSelect) return;
-        var typeKey = typeSelect.value;
-        majorModeSelect.disabled = (typeKey !== "major");
-      }
-
-      function updateAll() {
-        if (!rootSelect || !typeSelect || !viewModeSelect || !notationSelect || !boxSelect) return;
-
-        var displayRootIndex = parseInt(rootSelect.value, 10);
-        var typeKey = typeSelect.value;
-        var viewMode = viewModeSelect.value;
-        var boxNumber = parseInt(boxSelect.value, 10);
-        var notationMode = notationSelect.value;
-        var majorMode = majorModeSelect ? majorModeSelect.value : "relative";
-
-        // Radice "spaziale" per ancorare i box
-        var spatialRootIndex = displayRootIndex;
-
-        if (typeKey === "major") {
-          if (majorMode === "relative") {
-            // relativa minore: 3 semitoni sotto
-            spatialRootIndex = (displayRootIndex + 9) % 12;
-          } else {
-            // maggiore reale: stesso root
-            spatialRootIndex = displayRootIndex;
-          }
-        }
-
-        updateBoxSelectState();
-        updateMajorModeSelectState();
-        updateInfo(displayRootIndex, spatialRootIndex, typeKey, notationMode, viewMode, boxNumber);
-        renderFretboard(displayRootIndex, spatialRootIndex, typeKey, viewMode, boxNumber, notationMode);
-      }
-
-      function safeInit() {
-        initDomRefs();
-        if (!rootSelect) {
-          // se arriviamo qui, il DOM non corrisponde all'HTML previsto
-          return;
-        }
-        initRootSelect();
-        updateAll();
-
-        // Event listeners
-        rootSelect.addEventListener("change", updateAll);
-        typeSelect.addEventListener("change", updateAll);
-        if (majorModeSelect) {
-          majorModeSelect.addEventListener("change", updateAll);
-        }
-        viewModeSelect.addEventListener("change", updateAll);
-        boxSelect.addEventListener("change", updateAll);
-        notationSelect.addEventListener("change", updateAll);
-      }
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", safeInit);
       } else {
-        safeInit();
+        boxInfoEl.textContent =
+          "Manico intero: tutte le note della scala sono evidenziate sui primi " +
+          fretInfo + " tasti (0–" + fretInfo + ").";
       }
-    })();
-  </script>
+    }
+
+    // =========================
+    // GESTIONE SELECT / UPDATE
+    // =========================
+
+    function updateBoxSelectState() {
+      if (!viewModeSelect || !boxSelect) return;
+      var viewMode = viewModeSelect.value;
+      boxSelect.disabled = (viewMode !== "boxes");
+    }
+
+    function updateMajorModeSelectState() {
+      if (!typeSelect || !majorModeSelect) return;
+      var typeKey = typeSelect.value;
+      majorModeSelect.disabled = (typeKey !== "major");
+    }
+
+    function updateAll() {
+      if (!rootSelect || !typeSelect || !viewModeSelect || !notationSelect || !boxSelect) return;
+
+      var displayRootIndex = parseInt(rootSelect.value, 10);
+      var typeKey = typeSelect.value;
+      var viewMode = viewModeSelect.value;
+      var boxNumber = parseInt(boxSelect.value, 10);
+      var notationMode = notationSelect.value;
+      var majorMode = majorModeSelect ? majorModeSelect.value : "relative";
+      var maxFrets = 12;
+
+      if (fretCountSelect) {
+        var parsed = parseInt(fretCountSelect.value, 10);
+        if (!isNaN(parsed) && parsed > 0) {
+          maxFrets = parsed;
+        }
+      }
+
+      // Radice "spaziale" per ancorare i box
+      var spatialRootIndex = displayRootIndex;
+
+      if (typeKey === "major") {
+        if (majorMode === "relative") {
+          // relativa minore: 3 semitoni sotto
+          spatialRootIndex = (displayRootIndex + 9) % 12;
+        } else {
+          // maggiore reale: stesso root
+          spatialRootIndex = displayRootIndex;
+        }
+      }
+
+      updateBoxSelectState();
+      updateMajorModeSelectState();
+      updateInfo(displayRootIndex, spatialRootIndex, typeKey, notationMode, viewMode, boxNumber, maxFrets);
+      renderFretboard(displayRootIndex, spatialRootIndex, typeKey, viewMode, boxNumber, notationMode, maxFrets);
+    }
+
+    function safeInit() {
+      initDomRefs();
+      if (!rootSelect) return;
+      initRootSelect();
+      updateAll();
+
+      // Event listeners
+      rootSelect.addEventListener("change", updateAll);
+      typeSelect.addEventListener("change", updateAll);
+      if (majorModeSelect) {
+        majorModeSelect.addEventListener("change", updateAll);
+      }
+      viewModeSelect.addEventListener("change", updateAll);
+      boxSelect.addEventListener("change", updateAll);
+      notationSelect.addEventListener("change", updateAll);
+      if (fretCountSelect) {
+        fretCountSelect.addEventListener("change", updateAll);
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", safeInit);
+    } else {
+      safeInit();
+    }
+  })();
+</script>
+
     <script>
   (function () {
     function applyTheme(theme) {
@@ -914,6 +992,7 @@
 </script>
 </body>
 </html>
+
 
 
 
