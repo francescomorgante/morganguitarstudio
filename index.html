@@ -456,6 +456,93 @@
 .app-logo img:hover {
   opacity: 1;
 }
+/* ===== POPUP DI BENVENUTO ===== */
+
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.80); /* overlay scuro semi-trasparente */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.25s ease;
+}
+
+.welcome-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.welcome-modal {
+  background: var(--bg-card);
+  border-radius: 18px;
+  border: 1px solid var(--border-subtle);
+  padding: 24px 26px 20px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.welcome-logo {
+  width: 70%;
+  max-width: 260px;
+  height: auto;
+  display: block;
+  margin: 0 auto 14px auto;
+}
+
+.welcome-claim {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin: 0 0 18px 0;
+  line-height: 1.4;
+}
+
+.welcome-claim strong {
+  color: var(--accent);
+}
+
+.welcome-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #f9fafb;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease,
+    box-shadow 0.15s ease;
+}
+
+.welcome-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.45);
+}
+
+.welcome-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .welcome-modal {
+    padding: 20px 18px 16px;
+  }
+
+  .welcome-claim {
+    font-size: 0.85rem;
+  }
 }
 </style>
 </head>
@@ -470,6 +557,25 @@
 </div>   
     <div class="app-logo">
   <img src="assets/images/logo-morgan-guitar.png" alt="Morgan Guitar Studio Logo">
+</div>
+    <!-- Popup di benvenuto -->
+<div id="welcomeOverlay" class="welcome-overlay">
+  <div class="welcome-modal">
+    <img
+      src="assets/images/logo-morgan-guitar.png"
+      alt="Morgan Guitar Studio Logo"
+      class="welcome-logo"
+    />
+
+    <p class="welcome-claim">
+      studia le pentatoniche con Morgan Guitar Studio e dammi un feedback su
+      <strong>prof.morgante@gmail.com</strong>
+    </p>
+
+    <button id="welcomeEnterButton" class="welcome-button">
+      Entra nell'app
+    </button>
+  </div>
 </div>
     <h1>Pentatoniche facili con MORGAN GUITAR STUDIO </h1>
     <div class="subtitle">
@@ -1102,8 +1208,30 @@
     }
   })();
 </script>
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var overlay = document.getElementById("welcomeOverlay");
+    var button = document.getElementById("welcomeEnterButton");
+    if (!overlay || !button) return;
+
+    function closePopup() {
+      overlay.classList.add("hidden");
+    }
+
+    // Click sul bottone "Entra"
+    button.addEventListener("click", closePopup);
+
+    // Click fuori dalla modale (sull'overlay) chiude il popup
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) {
+        closePopup();
+      }
+    });
+  });
+</script>
 </body>
 </html>
+
 
 
 
