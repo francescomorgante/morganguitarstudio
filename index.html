@@ -359,6 +359,71 @@
       right: 16px;
     }
   }
+    /* === COLORI PER LE NOTE (scala + tonica) === */
+:root {
+  --note-normal-red: #e11d48;  /* rosso note normali */
+  --note-root-yellow: #facc15; /* giallo tonica */
+}
+
+/* Reset: niente riempimento di tutta la cella per le note in scala */
+.fretboard .note-cell.in-scale,
+.fretboard .note-cell.root-note {
+  background-color: var(--bg-fret-cell) !important;
+  color: var(--text-body);
+}
+
+/* Base tipografica della nota sul manico */
+.fretboard .note-name {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-body);
+  display: inline-block;
+  text-align: center;
+}
+
+/* Variante A: cerchio pieno con nota + grado dentro */
+.fretboard .note-cell.in-scale .note-name,
+.fretboard .note-cell.root-note .note-name {
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 999px;
+  padding: 4px 8px;
+  line-height: 1.1;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  box-shadow: 0 0 0 2px var(--bg-fretboard);
+}
+
+/* Note normali (rosso) */
+.fretboard .note-cell.in-scale .note-name {
+  background-color: var(--note-normal-red);
+  color: #f9fafb;  /* testo chiaro ad alto contrasto */
+}
+
+/* Tonica (giallo) */
+.fretboard .note-cell.root-note .note-name {
+  background-color: var(--note-root-yellow);
+  color: #111827; /* leggermente più scuro sul giallo */
+}
+
+/* Gradi dentro il pallino: chiari ma leggibili */
+.fretboard .note-cell.in-scale .note-degree,
+.fretboard .note-cell.root-note .note-degree {
+  color: #e5e7eb;
+}
+
+/* Legenda sotto il manico (coerenza colori) */
+.legend-swatch.scale {
+  background: var(--note-normal-red);
+}
+
+.legend-swatch.root {
+  background: var(--note-root-yellow);
+}
+
 </style>
 </head>
 <body>
@@ -1003,6 +1068,7 @@
 </script>
 </body>
 </html>
+
 
 
 
