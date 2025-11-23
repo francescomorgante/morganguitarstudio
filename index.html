@@ -434,6 +434,28 @@
 .legend-swatch.root {
   background: var(--note-root-yellow);
 }
+    /* === LOGO HEADER === */
+.app-logo {
+  width: 25%;              /* prende il 25% della larghezza */
+  max-width: 260px;        /* non diventa gigante sugli schermi larghi */
+  min-width: 140px;        /* resta leggibile su iPhone */
+  margin: 0 auto 22px auto;
+  display: flex;
+  justify-content: center;
+}
+
+.app-logo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.95;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+  transition: opacity 0.25s ease;
+}
+
+.app-logo img:hover {
+  opacity: 1;
+}
 </style>
 </head>
 <body>
@@ -445,6 +467,9 @@
     <span id="themeToggleLabel">Tema chiaro</span>
   </button>
 </div>   
+    <div class="app-logo">
+  <img src="assets/images/logo-morgan-guitar.png" alt="Morgan Guitar Studio Logo">
+</div>
     <h1>Scale pentatoniche – Trainer CAGED di Francesco Morgante</h1>
     <div class="subtitle">
       Scegli tonalità, tipo di scala, notazione e box. Visualizza le note sul manico in stile CAGED. Ma soprattutto adesso non hai scuse per non studiare
@@ -1078,6 +1103,7 @@
 </script>
 </body>
 </html>
+
 
 
 
