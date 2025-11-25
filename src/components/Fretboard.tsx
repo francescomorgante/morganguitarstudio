@@ -100,6 +100,7 @@ export const Fretboard: React.FC<FretboardProps> = ({
                   key={fretNum}
                   className={`fretboard__note ${hasAnnotation ? "fretboard__note--annotated" : ""}`}
                   data-testid={`note-${stringNum}-${fretNum}`}
+                  data-fret={fretNum}
                   onClick={() => handleNoteClick(stringNum, fretNum)}
                   aria-label={`String ${stringNum}, fret ${fretNum}${annotation?.label ? `, ${annotation.label}` : ""}`}
                   role="gridcell"

@@ -100,6 +100,21 @@
   position: relative;
 }
 
+.fretboard__note[data-fret="3"]::after,
+.fretboard__note[data-fret="5"]::after,
+.fretboard__note[data-fret="7"]::after,
+.fretboard__note[data-fret="9"]::after {
+  /* Single dot for frets 3, 5, 7, 9 */
+  content: "•";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  color: #d4d4d4;
+  pointer-events: none;
+}
+
 .fretboard__note[data-fret="12"]::after {
   /* Double dot for 12th fret */
   content: "••";
@@ -109,4 +124,5 @@
   transform: translateX(-50%);
   font-size: 8px;
   color: #d4d4d4;
+  pointer-events: none;
 }
