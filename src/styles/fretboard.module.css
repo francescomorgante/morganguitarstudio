@@ -1,0 +1,112 @@
+/**
+ * Fretboard Component Styles
+ *
+ * Optional CSS module for styling the Fretboard component.
+ * These styles provide a basic visual representation of a guitar fretboard.
+ */
+
+.fretboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px;
+  background-color: #8b4513; /* Saddle brown - wood color */
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.fretboard--full {
+  /* Full fretboard view */
+  width: 100%;
+}
+
+.fretboard--boxes {
+  /* CAGED box pattern view - narrower */
+  max-width: 300px;
+}
+
+.fretboard__string {
+  display: flex;
+  gap: 1px;
+  align-items: center;
+  position: relative;
+}
+
+.fretboard__string::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    #c0c0c0,
+    #d4d4d4 50%,
+    #c0c0c0
+  ); /* String appearance */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.fretboard__note {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 32px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  color: transparent;
+  border-right: 2px solid #4a4a4a; /* Fret */
+  transition: background-color 0.15s ease;
+}
+
+.fretboard__note:first-child {
+  /* Nut */
+  border-right: 4px solid #1a1a1a;
+  background-color: rgba(26, 26, 26, 0.1);
+}
+
+.fretboard__note:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.fretboard__note:focus {
+  outline: 2px solid #4a90d9;
+  outline-offset: -2px;
+}
+
+.fretboard__note--annotated {
+  background-color: #4a90d9;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fretboard__note--annotated:hover {
+  background-color: #3a7bc8;
+}
+
+/* Fret markers (dots) - commonly on frets 3, 5, 7, 9, 12 */
+.fretboard__note[data-fret="3"],
+.fretboard__note[data-fret="5"],
+.fretboard__note[data-fret="7"],
+.fretboard__note[data-fret="9"] {
+  position: relative;
+}
+
+.fretboard__note[data-fret="12"]::after {
+  /* Double dot for 12th fret */
+  content: "••";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  color: #d4d4d4;
+}
