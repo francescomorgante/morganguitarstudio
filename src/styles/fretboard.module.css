@@ -1,0 +1,230 @@
+/* Container */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Fretboard wrapper */
+.fretboardWrapper {
+  position: relative;
+  overflow-x: auto;
+}
+
+/* Fretboard grid */
+.fretboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #8b7355, #6b5345);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* String row */
+.string {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+
+.string::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, #e8e8e8, #c0c0c0);
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Individual fret */
+.fret {
+  position: relative;
+  width: 3rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #555;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.fret:first-child {
+  border-left: 3px solid #333;
+}
+
+.fret:hover:not(.disabled):not(.nonInteractive) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Active note (in scale/pattern) */
+.fret.active {
+  background-color: #4a90e2;
+  color: white;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 auto;
+  border: 2px solid #357abd;
+}
+
+/* Root note */
+.fret.root {
+  background-color: #e74c3c;
+  border-color: #c0392b;
+  font-weight: 700;
+}
+
+/* Highlighted note */
+.fret.highlighted {
+  box-shadow: 0 0 0 3px #f39c12;
+  z-index: 2;
+}
+
+/* Selected position */
+.fret.selected {
+  box-shadow: 0 0 0 3px #2ecc71;
+  z-index: 2;
+}
+
+/* Focused position (keyboard navigation) */
+.fret.focused {
+  outline: 3px solid #9b59b6;
+  outline-offset: 2px;
+  z-index: 3;
+}
+
+/* Disabled position */
+.fret.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Annotated position */
+.fret.annotated {
+  font-weight: 700;
+}
+
+/* Fret numbers */
+.fretNumbers {
+  display: flex;
+  gap: 0;
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.fretNumber {
+  width: 3rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* Inlays (dot markers) */
+.inlays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  padding-left: 1rem;
+}
+
+.inlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 3rem;
+  padding: 0.5rem 0;
+}
+
+.inlayDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Themes */
+.container.light {
+  background-color: #f9f9f9;
+}
+
+.container.light .controls {
+  background-color: #e9ecef;
+}
+
+.container.light .label {
+  color: #333;
+}
+
+.container.dark {
+  background-color: #1a1a1a;
+}
+
+.container.dark .controls {
+  background-color: #2d2d2d;
+}
+
+.container.dark .label {
+  color: #e0e0e0;
+}
+
+.container.dark .fretboard {
+  background: linear-gradient(to bottom, #3d3d3d, #2d2d2d);
+}
+
+.container.dark .fretNumber {
+  color: #999;
+}
+
+/* Orientation */
+.container.vertical .fretboard {
+  flex-direction: row;
+}
+
+.container.vertical .string {
+  flex-direction: column;
+}
+
+.container.vertical .fret {
+  width: 2rem;
+  height: 3rem;
+}
+
+/* Non-interactive mode */
+.container.nonInteractive .fret {
+  cursor: default;
+}
+
+.container.nonInteractive .fret:hover {
+  background-color: transparent;
+}
