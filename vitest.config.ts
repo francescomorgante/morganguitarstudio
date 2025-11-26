@@ -1,16 +1,10 @@
 ﻿import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
 
-export default defineConfig(async () => {
-  // Import ESM-only plugins dynamically to avoid ERR_REQUIRE_ESM
-  const reactPlugin = (await import("@vitejs/plugin-react")).default;
-
-  return {
-    plugins: [reactPlugin()],
-    test: {
-      environment: "jsdom",
-      globals: true,
-      // Se hai uno setup file per testing-library, abilitalo qui (opzionale)
-      // setupFiles: "tests/setup.ts",
-    },
-  };
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: "happy-dom",
+    globals: true,
+  },
 });
