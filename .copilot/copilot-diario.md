@@ -15,9 +15,11 @@ Questo diario raccoglie i log operativi e i riassunti approvati per garantire co
 
 - Libreria musicale (US-011) completata e mergeata.
 - Componente Fretboard (US-012) completato con tutti gli enhancements (CAGED, scaleType, custom themes) e mergeato.
+- Componente CAGED/Pentatoniche (US-010) completato e mergeato.
+- Pagina Scale (US-014) completata e mergeata.
 - CHORE-001 (setup qualità: ESLint, Prettier, CI, templates) completato e mergeato. Quality gate attivo.
-- Milestone 1 MVP: 3/5 user stories complete (US-011, US-010, US-012). Rimangono US-013 (Accordi) e US-014 (Scale).
-- Prossimi step: US-014 (Scale page) o US-013 (Accordi page).
+- Milestone 1 MVP: 4/5 user stories complete (US-011, US-010, US-012, US-014). Rimane US-013 (Chords page).
+- Prossimo step: US-013 (Accordi page) per completare Milestone 1.
 
 ## Azioni svolte nella sessione di oggi (2025-11-26)
 
@@ -218,5 +220,23 @@ Files:
   Commit: 388c026
   Checks: TypeScript ✅ 0 errors; ESLint ✅ 0 errors; Prettier ✅ all files formatted; Tests ✅ 55/55 passed; CI ✅ all checks passing
   Notes: Quality gate attivo. Ogni PR ora richiede lint, format, TypeScript check e test. Milestone 1 infrastruttura completa (3/5 US complete: US-011, US-010, US-012). Prossimi step: US-014 (Scale page) o US-013 (Accordi page).
+
+---
+
+Date: 2025-11-27
+PR: #27 – feat(US-014): Implement Scale page with Fretboard integration (merged & squashed)
+Issue: US-014
+Milestone: Milestone 1 – MVP
+Summary: Implementata pagina Scale completa con selettori tonica/tipo scala, sezione teoria musicale e integrazione Fretboard. Supporto per 4 tipi di scale (pentatoniche e scale complete maggiore/minore).
+Files:
+
+- src/pages/Scale.tsx (new - 81 lines)
+- src/styles/scale.module.css (new - 127 lines)
+- src/stories/Scale.stories.tsx (new - 2 stories)
+- tests/pages/Scale.spec.tsx (new - 10 test)
+  Status: merged & squashed
+  Commit: 723d3ec
+  Checks: TypeScript ✅ 0 errors; ESLint ✅ 0 errors; Prettier ✅ formatted; Tests ✅ 65/65 passed (10 new Scale tests)
+  Notes: Pagina pronta per uso didattico. Integra perfettamente con Fretboard (US-012) e libreria musicale (US-011). Milestone 1 progresso: 4/5 US complete (US-011, US-010, US-012, US-014). Rimane solo US-013 (Chords page).
 
 ---
