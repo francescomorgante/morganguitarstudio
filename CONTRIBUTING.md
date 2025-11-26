@@ -18,8 +18,19 @@
    - Non creare file diary duplicati.
 
 4. Quality gate
-   - Tutte le PR devono passare typecheck e test locali (npx tsc --noEmit, npx vitest run).
-   - Un workflow CI deve validare le PR prima del merge (vedi CHORE-001).
+   - Tutte le PR devono passare i controlli qualità locali PRIMA del push:
+     ```bash
+     npx tsc --noEmit        # TypeScript check (0 errori)
+     npm run lint            # ESLint check (0 errori)
+     npm run format:check    # Prettier check (tutti formattati)
+     npx vitest run          # Test suite (tutti passanti)
+     ```
+   - Per auto-fix lint/format issues:
+     ```bash
+     npm run lint:fix        # Fix automatico problemi ESLint
+     npm run format          # Formatta tutto il codice con Prettier
+     ```
+   - Un workflow CI valida automaticamente typecheck, lint, format e test su ogni PR.
 
 5. Automazioni
    - Il workflow pr-body-check verifica che ogni PR includa riferimento a issue/vision/diary.

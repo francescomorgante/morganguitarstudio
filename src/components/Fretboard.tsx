@@ -70,22 +70,22 @@ export interface FretboardPosition {
  */
 export interface FretboardProps {
   // ===== Base Props (from vision) =====
-  
+
   /** Number of strings (default: 6 for guitar) */
   strings?: number;
-  
+
   /** Number of frets to display (default: 15) */
   frets?: number;
-  
+
   /** Tuning configuration as array of note indices (default: standard E A D G B E) */
   tuning?: Tuning;
-  
+
   /** View mode: scale/pentatonic/chord/notes */
   viewMode: ViewMode;
-  
+
   /** Root note as numeric index (0-11) or note name (e.g., 'C', 'A#') */
   rootNote?: number | string;
-  
+
   /** CAGED pattern ID (1-5 for C, A, G, E, D boxes) */
   patternId?: number;
 
@@ -93,44 +93,44 @@ export interface FretboardProps {
   scaleType?: string;
 
   /** Whether to show labels on notes (default: true) */
-  showLabels?: boolean;  /** Callback when a note is clicked */
+  showLabels?: boolean /** Callback when a note is clicked */;
   onNoteClick?: (string: number, fret: number, noteIndex: number) => void;
 
   // ===== Additional Props =====
-  
+
   /** Custom annotations to display on specific positions */
   annotations?: NoteAnnotation[];
-  
+
   /** Highlighted notes (array of note indices 0-11) */
   highlightedNotes?: number[];
-  
+
   /** Currently selected position (for visual feedback) */
   selectedPosition?: FretboardPosition;
-  
+
   /** Whether to show fingering numbers (1-4) */
   fingeringNumbers?: boolean;
-  
+
   /** Positions that are disabled/grayed out */
   disabledPositions?: FretboardPosition[];
-  
+
   /** Orientation: horizontal or vertical (default: horizontal) */
   orientation?: Orientation;
-  
+
   /** Whether to show fret numbers (default: true) */
   showFretNumbers?: boolean;
-  
+
   /** Whether to show fretboard inlays (dot markers) */
   showInlays?: boolean;
-  
+
   /** Theme for appearance (default: 'light') */
   theme?: FretboardTheme;
-  
+
   /** Whether the fretboard is interactive (default: true) */
   interactive?: boolean;
-  
+
   /** Currently focused note (for keyboard navigation) */
   focusedNote?: FretboardPosition;
-  
+
   /** Callback when focus changes (for accessibility) */
   onFocusChange?: (position: FretboardPosition | null) => void;
 }
@@ -166,7 +166,6 @@ export function Fretboard({
   focusedNote,
   onFocusChange,
 }: FretboardProps): React.ReactElement {
-  
   // Internal focus state if not controlled
   const [internalFocus, setInternalFocus] = useState<FretboardPosition | null>(null);
   const currentFocus = focusedNote ?? internalFocus;
@@ -197,13 +196,13 @@ export function Fretboard({
   // Get CAGED pattern data if patternId is provided
   const cagedPattern = useMemo(() => {
     if (!patternId || rootIndex === null || viewMode !== 'pentatonic') return null;
-    
+
     try {
       return getTransposedBoxFrets(rootIndex, patternId, tuning);
     } catch {
       return null;
     }
-  }, [patternId, rootIndex, viewMode, tuning]);  // Check if a position is disabled
+  }, [patternId, rootIndex, viewMode, tuning]); // Check if a position is disabled
   const isPositionDisabled = useCallback(
     (string: number, fret: number): boolean => {
       return disabledPositions.some((pos) => pos.string === string && pos.fret === fret);
@@ -240,9 +239,9 @@ export function Fretboard({
     (string: number, fret: number, noteIndex: number) => {
       if (!interactive) return;
       if (isPositionDisabled(string, fret)) return;
-      
+
       onNoteClick?.(string, fret, noteIndex);
-      
+
       // Update focus
       const newFocus = { string, fret };
       setInternalFocus(newFocus);
@@ -275,7 +274,8 @@ export function Fretboard({
       isActive = isInCaged; // Use CAGED pattern positions
     } else {
       isActive = isInScale;
-    }    const classNames = [
+    }
+    const classNames = [
       styles.fret,
       isActive ? styles.active : '',
       isRoot && isActive ? styles.root : '',
@@ -333,7 +333,7 @@ export function Fretboard({
         {Array.from({ length: frets + 1 }, (_, fret) => {
           const isInlay = INLAY_FRETS.includes(fret);
           const isDouble = DOUBLE_INLAY_FRETS.includes(fret);
-          
+
           if (!isInlay) return null;
 
           return (
@@ -366,14 +366,17 @@ export function Fretboard({
   const stringNumbers = Array.from({ length: strings }, (_, i) => strings - i);
 
   // Apply custom theme if provided
-  const customThemeStyle = typeof theme === 'object' ? {
-    '--fretboard-root-color': theme.root,
-    '--fretboard-active-color': theme.active,
-    '--fretboard-bg-color': theme.background,
-    '--fretboard-string-color': theme.stringColor,
-    '--fretboard-fret-color': theme.fretColor,
-    '--fretboard-highlighted-color': theme.highlighted,
-  } as React.CSSProperties : undefined;
+  const customThemeStyle =
+    typeof theme === 'object'
+      ? ({
+          '--fretboard-root-color': theme.root,
+          '--fretboard-active-color': theme.active,
+          '--fretboard-bg-color': theme.background,
+          '--fretboard-string-color': theme.stringColor,
+          '--fretboard-fret-color': theme.fretColor,
+          '--fretboard-highlighted-color': theme.highlighted,
+        } as React.CSSProperties)
+      : undefined;
 
   const themeClass = typeof theme === 'string' ? theme : 'custom';
 
@@ -390,21 +393,31 @@ export function Fretboard({
   const ariaLabelText = `Fretboard: ${rootNoteName} ${viewMode}, ${frets} frets, ${strings} strings`;
 
   return (
-    <div className={containerClassNames} role="region" aria-label={ariaLabelText} style={customThemeStyle}>
+    <div
+      className={containerClassNames}
+      role="region"
+      aria-label={ariaLabelText}
+      style={customThemeStyle}
+    >
       <div className={styles.controls}>
         <span className={styles.label}>
-          Root: {rootNoteName} | View: {viewMode} 
+          Root: {rootNoteName} | View: {viewMode}
           {patternId && ` | Pattern: ${patternId}`}
         </span>
       </div>
-      
+
       <div className={styles.fretboardWrapper}>
         {renderInlays()}
         {renderFretNumbers()}
-        
+
         <div className={styles.fretboard} role="grid" aria-label="Guitar fretboard">
           {stringNumbers.map((stringNum) => (
-            <div key={stringNum} className={styles.string} role="row" aria-label={`String ${stringNum}`}>
+            <div
+              key={stringNum}
+              className={styles.string}
+              role="row"
+              aria-label={`String ${stringNum}`}
+            >
               {Array.from({ length: frets + 1 }, (_, fret) => renderFret(stringNum, fret))}
             </div>
           ))}

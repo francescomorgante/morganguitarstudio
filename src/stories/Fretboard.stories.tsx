@@ -259,7 +259,6 @@ export const Interactive: Story = {
   },
 };
 
-
 // Enhancement: CAGED Pattern Integration
 export const CAGEDPatternExample: Story = {
   args: {
