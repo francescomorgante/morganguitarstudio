@@ -30,3 +30,24 @@ Questo diario raccoglie i log operativi e i riassunti approvati per garantire co
 ## Note operative
 - Il diario Ã¨ mantenuto in .copilot/ per non interferire con i file di build (index.html).
 - Per ora l'aggiornamento del diario Ã¨ manuale; successivamente potremo automatizzarlo con GitHub Actions quando il flusso Ã¨ stabile.
+
+## 2025-11-26 — Merge docs/add-copilot-context & CONTRIBUTING.md
+- Autore: @francescomorgante (con aiuto di Copilot)
+- Branch principali: docs/add-copilot-context (merged), docs/add-contributing-snippet (merged)
+- PR:
+  - https://github.com/francescomorgante/morganguitarstudio/pull/11
+  - https://github.com/francescomorgante/morganguitarstudio/pull/12
+- Issue di riferimento: #3
+- Obiettivo: pubblicare istruzioni e template per Copilot, aggiungere CONTRIBUTING.md con SOP di sessione.
+- Azioni svolte:
+  - Aggiunta .github/copilot-instructions.md
+  - Aggiunta 3 issue template in .github/ISSUE_TEMPLATE
+  - Aggiunta .copilot/copilot-diario.md (base)
+  - Aggiunta CONTRIBUTING.md con procedura SOP
+- Decisioni / Razionali:
+  - Separare modifiche di contesto/documentazione in PR distinte per review più rapide.
+  - Tenere diario in repo e aggiornare manualmente tramite PR per avere tracciabilità.
+- Blockers: nessuno rilevante.
+- Prossimi step:
+  1. Creare CHORE-001 (chore/setup-quality) per CI, CODEOWNERS e PR template automatizzati.
+  2. Valutare automazione (GitHub Action) che appenda voci al diario al merge.
