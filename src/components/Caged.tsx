@@ -28,10 +28,21 @@ export default function Caged({
   notation = 'tab',
 }: CagedProps): React.ReactElement {
   // Resolve root to numeric index
-  const rootIndex =
-    typeof initialRoot === 'number'
-      ? initialRoot
-      : (noteNameToIndex(initialRoot) ?? 0);
+  const resolvedRoot = typeof initialRoot === 'number'
+    ? initialRoot
+    : noteNameToIndex(initialRoot);
+  
+  if (resolvedRoot === null) {
+    return (
+      <div className={styles.cagedContainer} data-testid="caged-component">
+        <div className={styles.header}>
+          <span className={styles.title}>Error: Invalid root note "{initialRoot}"</span>
+        </div>
+      </div>
+    );
+  }
+  
+  const rootIndex = resolvedRoot;
 
   // Get scale info
   const scaleInfo = getScale(rootIndex, initialType);
