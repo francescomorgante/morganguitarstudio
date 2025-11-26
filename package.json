@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "description": "app guitar training",
   "main": "index.js",
-  "scripts": { "test": "vitest", "test:watch": "vitest --watch", "lint": "eslint . --ext .ts,.tsx,.js", "build": "tsc --noEmit" },
+  "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "lint": "eslint . --ext .ts,.tsx,.js",
+    "build": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/francescomorgante/morganguitarstudio.git"
@@ -17,12 +24,27 @@
   },
   "homepage": "https://github.com/francescomorgante/morganguitarstudio#readme",
   "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/blocks": "^8.6.14",
+    "@storybook/react": "^8.6.14",
+    "@storybook/react-vite": "^8.6.14",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^8.48.0",
     "@typescript-eslint/parser": "^8.48.0",
+    "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
+    "jsdom": "^27.2.0",
+    "storybook": "^8.6.14",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
+    "vite": "^6.4.1",
     "vitest": "^4.0.14"
+  },
+  "dependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   }
 }

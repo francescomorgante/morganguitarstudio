@@ -1,1 +1,7 @@
-node_modules/ echo .env echo .vscode/ echo dist/ echo .DS_Store 
+node_modules/
+.env
+.vscode/
+dist/
+.DS_Store
+*.log
+storybook-static/
