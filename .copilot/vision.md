@@ -106,10 +106,8 @@ Stima totale MVP Studio (Milestones B+C+D+tests): ~9–16 giorni (1 dev).
 ---
 
 ## 12 — Prossimi passi consigliati (operativi)
-1. Confermiamo questo testo.  
-2. Creiamo issue US-012 (MVP Studio) e TOOLS-001 (skeleton upload/job) basate su questo documento.  
-3. Scaffolding del branch feature/us-012-fretboard con parser stub e component skeleton per produrre la prima PR/preview.
+1. Creiamo issue US-012 (MVP Studio) e TOOLS-001 (skeleton upload/job) basate su questo documento.  
+2. Scaffolding del branch feature/us-012-fretboard con parser stub e component skeleton per produrre la prima PR/preview.
 
 ---
 
-Nota: questa è una bozza di vision collaborativa. Non verrà inserita nel repo finché non mi dai conferma. Quando confermi, la salvo in `.copilot/vision.md` in un branch `docs/add-vision` e apro la PR con link nella tua checklist.
