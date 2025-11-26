@@ -1,20 +1,20 @@
 # Diario di lavoro di Copilot
 
-Questo diario raccoglie i log operativi e i riassunti approvati per garantire continuità tra sessioni.
+Questo diario raccoglie i log operativi e i riassunti approvati per garantire continuitÃ  tra sessioni.
 
 ## Indice (generato/aggiornato)
-- [2025-11-24] Analisi progetto — App supporto studio chitarra
-- [2025-11-25] Milestone: MVP — Studio Refactor
+- [2025-11-24] Analisi progetto â€” App supporto studio chitarra
+- [2025-11-25] Milestone: MVP â€” Studio Refactor
 - [2025-11-26] Snapshot progetto & Scaletta Milestone
 - [2025-11-26] Sessione iniziale: sincronizzazione contesto (da copilot-diary)
 
-> L'indice verrà rigenerato da automation quando miglioreremo lo script (etichetta `summary-needed` / `approved`).
+> L'indice verrÃ  rigenerato da automation quando miglioreremo lo script (etichetta `summary-needed` / `approved`).
 
 ## Stato corrente
 - Libreria musicale (US-011) completata e mergeata nel repo pubblico.
-- Componente Fretboard (US-012) in PR draft: completare props, accessibilità, test, docs prima di review.
-- CHORE-001 (setup qualità: ESLint, Prettier, CI, templates) da implementare per stabilizzare lo sviluppo.
-- Decisioni aperte: confermare Node LTS (20), avvio Next.js nel repo principale, priorità successiva dopo Fretboard (Pentatoniche / Accordi / Scale).
+- Componente Fretboard (US-012) in PR draft: completare props, accessibilitÃ , test, docs prima di review.
+- CHORE-001 (setup qualitÃ : ESLint, Prettier, CI, templates) da implementare per stabilizzare lo sviluppo.
+- Decisioni aperte: confermare Node LTS (20), avvio Next.js nel repo principale, prioritÃ  successiva dopo Fretboard (Pentatoniche / Accordi / Scale).
 
 ## Azioni svolte nella sessione di oggi (2025-11-26)
 - Verificato contenuto originale in francescomorgante/copilot-diary (istructions + diario).
@@ -22,16 +22,16 @@ Questo diario raccoglie i log operativi e i riassunti approvati per garantire co
 - Concordato flusso: consolidare file di contesto nel repo pubblico e usare branch/PR + Vercel Preview per i test.
 - Preparati i file da spostare nel repo pubblico (istruzioni, template, diario con voce di oggi).
 
-## Prossimi step (priorità)
+## Prossimi step (prioritÃ )
 1. Creare branch docs/add-copilot-context su francescomorgante/morganguitarstudio (public) e copiarvi questi file.
 2. Aprire PR verso main e verificare Preview su Vercel.
 3. Dopo verifica, lavorare su feature branch per US-012 (Fretboard) e registrare ogni sessione con issue "Copilot Daily Log".
 
 ## Note operative
-- Il diario è mantenuto in .copilot/ per non interferire con i file di build (index.html).
-- Per ora l'aggiornamento del diario è manuale; successivamente potremo automatizzarlo con GitHub Actions quando il flusso è stabile.
+- Il diario Ã¨ mantenuto in .copilot/ per non interferire con i file di build (index.html).
+- Per ora l'aggiornamento del diario Ã¨ manuale; successivamente potremo automatizzarlo con GitHub Actions quando il flusso Ã¨ stabile.
 
-## 2025-11-26 � Merge docs/add-copilot-context & CONTRIBUTING.md
+## 2025-11-26 — Merge docs/add-copilot-context & CONTRIBUTING.md
 - Autore: @francescomorgante (con aiuto di Copilot)
 - Branch principali: docs/add-copilot-context (merged), docs/add-contributing-snippet (merged)
 - PR:
@@ -45,9 +45,48 @@ Questo diario raccoglie i log operativi e i riassunti approvati per garantire co
   - Aggiunta .copilot/copilot-diario.md (base)
   - Aggiunta CONTRIBUTING.md con procedura SOP
 - Decisioni / Razionali:
-  - Separare modifiche di contesto/documentazione in PR distinte per review pi� rapide.
-  - Tenere diario in repo e aggiornare manualmente tramite PR per avere tracciabilit�.
+  - Separare modifiche di contesto/documentazione in PR distinte per review più rapide.
+  - Tenere diario in repo e aggiornare manualmente tramite PR per avere tracciabilità.
 - Blockers: nessuno rilevante.
 - Prossimi step:
   1. Creare CHORE-001 (chore/setup-quality) per CI, CODEOWNERS e PR template automatizzati.
   2. Valutare automazione (GitHub Action) che appenda voci al diario al merge.
+  3. 
+  ```markdown
+## 2025-11-26 — Vision pubblicata e analisi progetto
+Autore: @francescomorgante (con supporto Copilot)
+
+Sommario
+- Aggiunta bozza della Vision in `.copilot/vision.md` (branch `docs/add-vision`, PR aperta).
+- Analisi completa del prototipo originario (index.html, pentatoniche / CAGED) e definizione della scaletta di lavoro per le prossime milestone.
+
+Cosa è stato fatto
+- Creato e committato il documento di Vision (`.copilot/vision.md`) sul branch `docs/add-vision`.
+- Eseguita l'analisi del prototipo: repertorio di bug critici rilevati (es. doppio `<body>`, mancanza meta viewport, punti di accessibilità).
+- Preparati draft-issue operativi per la migrazione incrementale del prototipo (PROTOTYPE-001..PROTOTYPE-007).
+- Definita la priorità delle attività per l’MVP Studio (estrazione lib/music, Fretboard React/TS, parser MusicXML/GPro, mapNotesToPositions, trascrizione semplice).
+
+Decisioni prese
+- Manteniamo il diario ufficiale in `.copilot/copilot-diario.md` (non migriamo il file), e lo useremo come fonte di verità.
+- Procedura di lavoro: estrazione di utilità + test prima di refactor UI; prototipo live mantenuto finché non sostituito dalla versione React/TS.
+- Conservare feature_flag `tools.paid_mode=false` e logging uso per future possibilità di gating/monetizzazione.
+
+Riferimenti
+- Vision file: `.copilot/vision.md` (branch `docs/add-vision`)
+- PR della Vision: branch `docs/add-vision` — PR aperta (inserire link PR se disponibile)
+- Draft issues: PROTOTYPE-001 .. PROTOTYPE-007 (bozze preparate)
+- PR/merge recenti di contesto: https://github.com/francescomorgante/morganguitarstudio/pull/11 , https://github.com/francescomorgante/morganguitarstudio/pull/12
+- Issue di riferimento: #3
+
+Prossimi passi immediati
+1. Creare issue operative: US-012 (MVP Studio) e TOOLS-001 (skeleton upload/job) — tracciatura e planning.  
+2. Estrarre `src/lib/music` e aggiungere unit tests (priorità alta).  
+3. Scaffolding componente `Fretboard` React/TS che riusi `lib/music`.  
+4. Applicare fix minimi non distruttivi al prototipo (PROTOTYPE-002) in branch separato, se necessario.
+
+Note operative
+- Questa voce va committata sul branch `docs/add-vision` e inclusa nella PR esistente, così il reviewer ha visibilità completa del contesto.
+- Se preferisci, posso aggiungere qui il link diretto alla PR della Vision non appena me lo fornisci.
+
+---
+```
