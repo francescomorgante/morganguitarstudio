@@ -13,10 +13,11 @@ Questo diario raccoglie i log operativi e i riassunti approvati per garantire co
 
 ## Stato corrente
 
-- Libreria musicale (US-011) completata e mergeata nel repo pubblico.
-- Componente Fretboard (US-012) in PR draft: completare props, accessibilitÃƒÂ , test, docs prima di review.
-- CHORE-001 (setup qualitÃƒÂ : ESLint, Prettier, CI, templates) da implementare per stabilizzare lo sviluppo.
-- Decisioni aperte: confermare Node LTS (20), avvio Next.js nel repo principale, prioritÃƒÂ  successiva dopo Fretboard (Pentatoniche / Accordi / Scale).
+- Libreria musicale (US-011) completata e mergeata.
+- Componente Fretboard (US-012) completato con tutti gli enhancements (CAGED, scaleType, custom themes) e mergeato.
+- CHORE-001 (setup qualità: ESLint, Prettier, CI, templates) completato e mergeato. Quality gate attivo.
+- Milestone 1 MVP: 3/5 user stories complete (US-011, US-010, US-012). Rimangono US-013 (Accordi) e US-014 (Scale).
+- Prossimi step: US-014 (Scale page) o US-013 (Accordi page).
 
 ## Azioni svolte nella sessione di oggi (2025-11-26)
 
@@ -177,5 +178,45 @@ Files:
   Commit: 60eecc3
   Checks: TypeScript ✅ 0 errors; Tests ✅ 43/43 passed (36 Fretboard + 5 Caged + 2 scales); PR body check failed (diary reference issue - bypassed for merge)
   Notes: Componente ready per integrazione in pagine Studio (US-013, US-014). TODO: collegare CAGED patterns con getTransposedBoxFrets, aggiungere prop scaleType, implementare fingering numbers logic.
+
+---
+
+Date: 2025-11-27
+PR: #23, #24, #25 – feat(US-012): Fretboard enhancements (CAGED integration, scaleType, custom themes) (merged & squashed)
+Issue: US-012
+Milestone: Milestone 1 – MVP
+Summary: Completati gli enhancements del Fretboard con integrazione CAGED, prop scaleType, fingering numbers e custom themes. Aggiunti 12 test per le nuove funzionalità.
+Files:
+
+- src/components/Fretboard.tsx (aggiunto supporto CAGED, scaleType, CustomTheme)
+- src/stories/Fretboard.stories.tsx (4 nuove stories per enhancements)
+- tests/components/Fretboard.enhancements.spec.tsx (12 test)
+  Status: merged & squashed
+  Checks: TypeScript ✅ 0 errors; Tests ✅ 55/55 passed (36 base + 12 enhancements + 5 Caged + 2 scales)
+  Notes: Issue US-012 completata e chiusa. Fretboard pronto per uso in pagine Studio.
+
+---
+
+Date: 2025-11-27
+PR: #26 – chore(CHORE-001): Setup quality infrastructure (ESLint, Prettier, CI) (merged & squashed)
+Issue: CHORE-001 (#17)
+Milestone: Milestone 1 – MVP
+Summary: Implementata infrastruttura qualità completa con ESLint v9 (flat config), Prettier, CI automation, i18n skeleton, .gitattributes per line endings.
+Files:
+
+- eslint.config.mjs (new - ESLint v9 flat config)
+- .prettierrc.json (new)
+- .prettierignore (new)
+- .gitattributes (new - enforce LF)
+- .github/workflows/ci.yml (added lint & format:check steps)
+- package.json (added scripts: lint:fix, format, format:check)
+- locales/it.json, locales/en.json (i18n skeleton)
+- CONTRIBUTING.md (expanded with quality gate section)
+- tests/vitest.d.ts (fixed ESLint errors)
+- deleted: .eslintrc.js (migrated to flat config)
+  Status: merged & squashed
+  Commit: 388c026
+  Checks: TypeScript ✅ 0 errors; ESLint ✅ 0 errors; Prettier ✅ all files formatted; Tests ✅ 55/55 passed; CI ✅ all checks passing
+  Notes: Quality gate attivo. Ogni PR ora richiede lint, format, TypeScript check e test. Milestone 1 infrastruttura completa (3/5 US complete: US-011, US-010, US-012). Prossimi step: US-014 (Scale page) o US-013 (Accordi page).
 
 ---
