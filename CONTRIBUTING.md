@@ -1,51 +1,25 @@
-# Contributing
+# Contributing - Regole sintetiche
 
-Grazie! Linee guida rapide:
+1. Vision e roadmap
+   - La Vision è in `.copilot/vision.md` e descrive gli obiettivi a medio/lungo termine.
+   - Le milestone mappano i passi concreti per realizzare la Vision (v. docs/ROADMAP.md).
 
-- Branch naming:
-  - feature/<US-ID>-<slug>
-  - chore/<id>-<slug>
-- Prima di aprire una PR esegui:
-  - npx tsc --noEmit
-  - npm run lint
-  - npm test
-- Usa il PR template presente in .github/PULL_REQUEST_TEMPLATE.md.
-- Linka l'issue con "Closes #N" se appropriato.
-- Commit message: Conventional commits: <type>(<scope>): descrizione
-- Per ogni sessione di lavoro crea un issue con il template "Copilot Daily Log".
+2. Issue / PR policy
+   - Crea sempre un issue (US-###) per lavori significativi e assegna la milestone corretta.
+   - Quando apri una PR:
+     - Usa il template PR (.github/PULL_REQUEST_TEMPLATE.md).
+     - Collega la PR a un issue (US-### o #NN) e alla Vision.
+     - Inserisci una voce diary standard nel body della PR che sarà poi copiato nel file canonico .copilot/copilot-diario.md al merge.
+     - Non chiudere issue senza aggiornare il diary.
 
-## Procedura ricorrente per sessioni di lavoro (SOP)
+3. Diario operativo
+   - Il diario canonico è: `.copilot/copilot-diario.md`. Usalo sempre.
+   - Prima del merge, inserisci la voce diary nel body PR; dopo il merge copia la voce nel file canonico.
+   - Non creare file diary duplicati.
 
-Segui questa procedura per ogni sessione di lavoro in repo:
+4. Quality gate
+   - Tutte le PR devono passare typecheck e test locali (npx tsc --noEmit, npx vitest run).
+   - Un workflow CI deve validare le PR prima del merge (vedi CHORE-001).
 
-1. Preparazione
-   - git checkout main
-   - git pull origin main
-   - git checkout -b <tipo>/<ID>-<slug>
-
-2. Logging
-   - Crea una issue usando il template "Copilot Daily Log" (titolo: `log: YYYY-MM-DD <titolo>`).
-   - Associa la issue al branch/PR (aggiungi `Closes #<issue>` nel PR se appropriato).
-
-3. Lavoro e verifica locale
-   - Esegui sviluppo e test locali.
-   - Prima del PR:
-     - npx tsc --noEmit
-     - npm run lint
-     - npm test
-
-4. Pull Request
-   - Apri PR verso `main` usando il PR template.
-   - Inserisci acceptance criteria e collegamenti alle issue.
-
-5. Post-merge
-   - Appendi una voce su `.copilot/copilot-diario.md` con:
-     - Data, branch, breve riepilogo, link PR/issue.
-   - Cancella branch locale e remoto.
-
-6. Labels & Diary
-   - Alla fine della sessione aggiungi label `summary-needed` all'issue; dopo approvazione cambia in `approved`.
-
-Automazioni consigliate (opzionali)
-- GitHub Action che, al merge di una PR verso main, appende automaticamente una voce al diario (.copilot/copilot-diario.md) e crea un commit.
-- GitHub Action per creare reminder/issues ricorrenti per il diario.
+5. Automazioni
+   - Il workflow pr-body-check verifica che ogni PR includa riferimento a issue/vision/diary.
