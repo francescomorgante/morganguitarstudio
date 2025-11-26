@@ -1,0 +1,25 @@
+{
+  "studio": {
+    "pentatonic": {
+      "title": "Scale Pentatoniche",
+      "description": "Esplora i 5 box CAGED delle scale pentatoniche",
+      "selectRoot": "Seleziona la tonica",
+      "selectPattern": "Seleziona il pattern",
+      "patterns": {
+        "1": "Pattern 1 (Box E)",
+        "2": "Pattern 2 (Box D)",
+        "3": "Pattern 3 (Box C)",
+        "4": "Pattern 4 (Box A)",
+        "5": "Pattern 5 (Box G)"
+      }
+    },
+    "chords": {
+      "title": "Accordi",
+      "description": "Visualizza accordi sulla tastiera"
+    },
+    "scales": {
+      "title": "Scale",
+      "description": "Esplora scale e modi sulla tastiera"
+    }
+  }
+}

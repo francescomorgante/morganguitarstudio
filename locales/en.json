@@ -1,0 +1,25 @@
+{
+  "studio": {
+    "pentatonic": {
+      "title": "Pentatonic Scales",
+      "description": "Explore the 5 CAGED boxes of pentatonic scales",
+      "selectRoot": "Select root note",
+      "selectPattern": "Select pattern",
+      "patterns": {
+        "1": "Pattern 1 (Box E)",
+        "2": "Pattern 2 (Box D)",
+        "3": "Pattern 3 (Box C)",
+        "4": "Pattern 4 (Box A)",
+        "5": "Pattern 5 (Box G)"
+      }
+    },
+    "chords": {
+      "title": "Chords",
+      "description": "Visualize chords on the fretboard"
+    },
+    "scales": {
+      "title": "Scales",
+      "description": "Explore scales and modes on the fretboard"
+    }
+  }
+}
