@@ -34,6 +34,9 @@ export function Caged({
       return initialRoot;
     }
     const idx = noteNameToIndex(initialRoot);
+    if (idx === null) {
+      console.warn(`Caged: Invalid note name "${initialRoot}", defaulting to C (0)`);
+    }
     return idx ?? 0;
   }, [initialRoot]);
 
