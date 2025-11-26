@@ -1,17 +1,17 @@
-﻿import { defineConfig } from "vitest/config";
+﻿import { defineConfig } from 'vitest/config';
 
 export default defineConfig(async () => {
-  const react = await import("@vitejs/plugin-react");
+  const react = await import('@vitejs/plugin-react');
 
   return {
     plugins: [react.default()],
     test: {
-      environment: "happy-dom",
+      environment: 'happy-dom',
       globals: true,
-      setupFiles: ["./tests/setup.ts"],
+      setupFiles: ['./tests/setup.ts'],
       css: {
         modules: {
-          classNameStrategy: "non-scoped",
+          classNameStrategy: 'non-scoped',
         },
       },
     },

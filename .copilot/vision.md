@@ -8,14 +8,16 @@ Scopo: fornire a contributori, Copilot agent e collaboratori una singola fonte d
 ---
 
 ## 1 — Sintesi veloce
+
 MorganGuitarStudio è una web‑app educativa e toolset per chitarristi, docenti e studenti che trasforma teoria musicale in pratica sul manico (fretboard). Le funzioni principali permettono di visualizzare scale, pentatoniche e accordi sul manico, importare partiture/tab (MusicXML, GuitarPro), ottenere una visualizzazione sincronizzata tab↔manico e trascrivere semplici tracce monofoniche da registrazione. Funzionalità avanzate (trascrizione audio di qualità maggiore, OMR da PDF, export avanzati) saranno introdotte in seguito come servizi a pagamento.
 
 ---
 
 ## 2 — Utenti target e valore
-- Studente principiante: capire velocemente dove mettere le dita e fare esercizi mirati.  
-- Musicista in apprendimento: confrontare voicings, esercitare posizioni, generare backing/trascrizioni.  
-- Insegnante: preparare esercizi e lesson basate su pattern visivi e tablature.  
+
+- Studente principiante: capire velocemente dove mettere le dita e fare esercizi mirati.
+- Musicista in apprendimento: confrontare voicings, esercitare posizioni, generare backing/trascrizioni.
+- Insegnante: preparare esercizi e lesson basate su pattern visivi e tablature.
 - Sviluppatore/integrazione: riusare il componente Fretboard in altri contesti (widget, lessons).
 
 Valore: riduzione del tempo di passaggio dalla teoria alla pratica, con interfacce chiare e modificabili.
@@ -23,12 +25,14 @@ Valore: riduzione del tempo di passaggio dalla teoria alla pratica, con interfac
 ---
 
 ## 3 — Macro‑sezioni dell’app
+
 - Sezione Studio (MVP, gratuita): Fretboard interattivo, modalità Scale / Pentatonic / Chord, import MusicXML/GuitarPro, mapping tab→manico, editing/override diteggiature, trascrizione semplice (monofonica).
 - Sezione Tools (futuro, initially free then paid): upload e conversione di partiture/audio in tab professionali, export (GuitarPro, MusicXML, PDF), servizi automatici di trascrizione avanzata. Implementare gratuità iniziale e gating successivo tramite feature flags e sistema credits.
 
 ---
 
 ## 4 — Funzionalità chiave (MVP)
+
 - Fretboard component (props: strings, frets, tuning, viewMode, rootNote, patternId, showLabels, onNoteClick).
 - Ingestione file: MusicXML e GuitarPro (prioritari).
 - Parser → internal model NoteEvent {pitch, midi, start, duration}.
@@ -42,6 +46,7 @@ Limiti iniziali: niente PDF/OMR, niente autoscroll automatico, limite duration t
 ---
 
 ## 5 — Regole di qualità e UX (scelte operative)
+
 - Diteggiatura: algoritmo produce una "miglior" proposta e opzioni alternative; l’utente può cambiare ma solo su posizioni valide (stesso pitch). Undo/redo disponibile.
 - CAGED: usare box CAGED come vincolo e proporre per ogni box la diteggiatura migliore; mostrare box in mini‑preview + manico principale; alternative per ciascun box.
 - Editing: non permettere operazioni che producono note con pitch errato o diteggiature impossibili.
@@ -51,6 +56,7 @@ Limiti iniziali: niente PDF/OMR, niente autoscroll automatico, limite duration t
 ---
 
 ## 6 — Architettura tecnica (high level)
+
 - Frontend: React + TypeScript (Vite or Next.js), Storybook.
 - Utils musica: tonal.js / teoria.js; xml2js for MusicXML; guitarpro‑parser for GuitarPro.
 - Rendering notazione/tab: VexFlow (opzione) o renderer custom.
@@ -62,6 +68,7 @@ Limiti iniziali: niente PDF/OMR, niente autoscroll automatico, limite duration t
 ---
 
 ## 7 — Piano di lavoro (milestone principali)
+
 Milestone A — CHORE-001 (setup infra): lint, formatter, test runner, PR/Issue template, Storybook CI — 1–2 giorni.  
 Milestone B — US-011 / US-010 (lib/music + rifattorizzazione Pentatoniche): notes/scales/caged utils + component base — 2–4 giorni.  
 Milestone C — US-012 (MVP Studio): parsing MusicXML/GPro, mapNotesToPositions, fretboard render, tab render, edit flow, stories, tests — 7–12 giorni.  
@@ -74,6 +81,7 @@ Stima totale MVP Studio (Milestones B+C+D+tests): ~9–16 giorni (1 dev).
 ---
 
 ## 8 — Monetizzazione e strategie "free now, paid later"
+
 - Implementare pipeline job & usage logging subito (anche se processiamo gratuitamente) e introdurre feature_flag tools.paid_mode=false.
 - Policy di free usage: limiti anonimi (es. max 3 conversioni/day, max 30s/file), limiti per account registrato più permissivi.
 - Quando si attiva paid_mode: server verifica credits/subscription prima di processare il job; client mostra CTA per acquisto senza cambiare API.
@@ -82,6 +90,7 @@ Stima totale MVP Studio (Milestones B+C+D+tests): ~9–16 giorni (1 dev).
 ---
 
 ## 9 — Rischi principali e mitigazioni
+
 - Trascrizione audio/polyphony imprecisa → mitigare con bozza modificabile e usare soluzioni commerciali per qualità.
 - OMR (PDF) = errori → post‑editing obbligatorio e fase post‑MVP.
 - Costi server/processing → rate limiting, retention e feature-flag.
@@ -90,6 +99,7 @@ Stima totale MVP Studio (Milestones B+C+D+tests): ~9–16 giorni (1 dev).
 ---
 
 ## 10 — Acceptance criteria (MVP Studio)
+
 - Import MusicXML/GuitarPro → internal NoteEvent list ricavata correttamente per 3 esempi test.
 - mapNotesToPositions produce posizioni valide per esempi C major scale, A minor pentatonic, G major triad.
 - UI: tab renderer + fretboard SVG mostrano highlights correttamente; click sincronizzati; editing valido.
@@ -99,6 +109,7 @@ Stima totale MVP Studio (Milestones B+C+D+tests): ~9–16 giorni (1 dev).
 ---
 
 ## 11 — Documentazione, collaborazione e policy Copilot
+
 - Questo documento è la base della vision: prima di modifiche strutturali significative o cambi di priorità, aprire issue con riferimento a questa vision.
 - Convenzione PR: includere Acceptance Criteria e link alla storybook preview; usare label `copilot-draft` per PR generati da Copilot che richiedono review umana.
 - Copilot non deve marcare PR ready-to-merge senza approvazione umana esplicita.
@@ -106,8 +117,8 @@ Stima totale MVP Studio (Milestones B+C+D+tests): ~9–16 giorni (1 dev).
 ---
 
 ## 12 — Prossimi passi consigliati (operativi)
-1. Creiamo issue US-012 (MVP Studio) e TOOLS-001 (skeleton upload/job) basate su questo documento.  
+
+1. Creiamo issue US-012 (MVP Studio) e TOOLS-001 (skeleton upload/job) basate su questo documento.
 2. Scaffolding del branch feature/us-012-fretboard con parser stub e component skeleton per produrre la prima PR/preview.
 
 ---
-

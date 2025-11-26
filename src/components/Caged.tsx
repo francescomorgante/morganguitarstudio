@@ -94,7 +94,11 @@ export function Caged({
   };
 
   return (
-    <div className={styles.container} role="region" aria-label={`${rootNoteName} ${initialType} scale`}>
+    <div
+      className={styles.container}
+      role="region"
+      aria-label={`${rootNoteName} ${initialType} scale`}
+    >
       <div className={styles.controls}>
         <span className={styles.label}>
           Root: {rootNoteName} | Type: {initialType} | View: {viewMode}

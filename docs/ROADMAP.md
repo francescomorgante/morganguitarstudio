@@ -15,6 +15,7 @@ Formato raccomandato (esempio corrente):
     - US-014: Scales — status: open — PR: feature/us-014-scales (depends on Fretboard)
 
 Regole:
+
 - Ogni issue che contribuisce alla milestone deve avere il tag della milestone.
 - Ogni PR che implementa un issue deve avere nel body "Closes US-XXX" oppure "Closes #NN".
 - Aggiorna questa mappa ogni volta che una PR viene mergeata o uno issue cambia stato.
