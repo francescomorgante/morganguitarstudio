@@ -1,0 +1,27 @@
+name: PR Body Check
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-pr-body:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify PR body references an issue or US-# and the Vision and diary
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const body = (context.payload.pull_request.body || "").toString();
+            const hasUS = /US-\d+/.test(body);
+            const hasIssue = /#\d+/.test(body);
+            const hasVision = /(\.copilot\/vision\.md|Vision)/i.test(body);
+            const hasDiary = /\.copilot\/copilot-diario\.md/.test(body);
+            if (!hasUS && !hasIssue) {
+              core.setFailed("PR body must reference an issue (format US-### or #NN). See .github/PULL_REQUEST_TEMPLATE.md");
+            } else if (!hasVision) {
+              core.setFailed("PR body must reference the Vision (.copilot/vision.md). See .github/PULL_REQUEST_TEMPLATE.md");
+            } else if (!hasDiary) {
+              core.setFailed("PR body must reference the canonical diary (.copilot/copilot-diario.md). See .github/PULL_REQUEST_TEMPLATE.md");
+            } else {
+              console.log("PR body contains required references (issue/vision/diary).");
+            }
