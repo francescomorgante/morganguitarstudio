@@ -89,4 +89,44 @@ Note operative
 - Se preferisci, posso aggiungere qui il link diretto alla PR della Vision non appena me lo fornisci.
 
 ---
-```
+---
+Date: 2025-11-26
+PR: #15 — feat(US-010): Refactor Pentatoniche page into reusable Caged component (merged)
+Issue: US-010 (#18)
+Milestone: Milestone 1
+Summary: Refactor della pagina Pentatoniche nel componente riutilizzabile Caged. Aggiunte stories e tests iniziali.
+Files:
+- src/components/Caged.tsx
+- src/stories/Caged.stories.tsx
+- tests/components/Caged.spec.tsx
+Status: merged
+Checks: typecheck OK; tests pass locally; storybook configured (build not run in CI)
+Notes: PR principale per US-010; subsequent skeleton extraction handled in PR #21.
+---
+
+Date: 2025-11-26
+PR: #21 — [WIP] Extract skeleton and relevant modifications from PR #16 (merged)
+Issue: US-010 (#18)
+Milestone: Milestone 1
+Summary: Estratti i file utili dallo skeleton di PR #16 per evitare sovrapposizioni con PR #15. Aggiunto barrel export per componenti.
+Files:
+- src/components/index.ts
+Status: merged
+Checks: typecheck OK; tests 7/7
+Notes: Se serve integrare ulteriori file da PR #16, aprire PR dedicate.
+---
+
+Date: 2025-11-26
+PR: #NN — chore(docs): add process templates (PR/issue/roadmap/diary) (merged)
+Issue: CHORE-001 (#17)
+Milestone: Milestone 1
+Summary: Aggiunti template PR/issue, workflow pr-body-check, docs/ROADMAP.md e CONTRIBUTING.md. Il file .copilot/copilot-diario.md non è stato modificato in questa PR.
+Files:
+- .github/PULL_REQUEST_TEMPLATE.md
+- .github/ISSUE_TEMPLATE/feature_request.md
+- .github/workflows/pr-body-check.yml
+- docs/ROADMAP.md
+- CONTRIBUTING.md
+Status: merged
+Checks: CI/PR checks (verificare risultati)
+---
