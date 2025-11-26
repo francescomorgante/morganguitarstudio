@@ -1,5 +1,6 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import { noteNameToIndex, EN_NOTES, getScale } from '../lib/music';
+import { getTransposedBoxFrets } from '../lib/music/caged';
 import styles from '../styles/fretboard.module.css';
 
 /**
@@ -26,8 +27,21 @@ export type Orientation = 'horizontal' | 'vertical';
 
 /**
  * Theme for the fretboard appearance.
+ * Can be a preset ('light' | 'dark') or a custom theme object.
  */
-export type FretboardTheme = 'light' | 'dark' | 'custom';
+export type FretboardTheme = 'light' | 'dark' | CustomTheme;
+
+/**
+ * Custom theme configuration with color overrides.
+ */
+export interface CustomTheme {
+  root?: string;
+  active?: string;
+  background?: string;
+  stringColor?: string;
+  fretColor?: string;
+  highlighted?: string;
+}
 
 /**
  * Note annotation with label and optional color.
@@ -74,11 +88,12 @@ export interface FretboardProps {
   
   /** CAGED pattern ID (1-5 for C, A, G, E, D boxes) */
   patternId?: number;
-  
+
+  /** Scale type to use (default: 'minor') */
+  scaleType?: string;
+
   /** Whether to show labels on notes (default: true) */
-  showLabels?: boolean;
-  
-  /** Callback when a note is clicked */
+  showLabels?: boolean;  /** Callback when a note is clicked */
   onNoteClick?: (string: number, fret: number, noteIndex: number) => void;
 
   // ===== Additional Props =====
@@ -135,6 +150,7 @@ export function Fretboard({
   viewMode,
   rootNote,
   patternId,
+  scaleType = 'minor',
   showLabels = true,
   onNoteClick,
   annotations = [],
@@ -170,17 +186,24 @@ export function Fretboard({
   const scaleData = useMemo(() => {
     if (rootIndex === null) return null;
     if (viewMode === 'notes') return null; // Free mode, no scale
-    
+
     try {
-      // For now, use 'minor' as default scale type
-      // TODO: Add scaleType prop when needed
-      return getScale(rootIndex, 'minor');
+      return getScale(rootIndex, scaleType);
     } catch {
       return null;
     }
-  }, [rootIndex, viewMode]);
+  }, [rootIndex, viewMode, scaleType]);
 
-  // Check if a position is disabled
+  // Get CAGED pattern data if patternId is provided
+  const cagedPattern = useMemo(() => {
+    if (!patternId || rootIndex === null || viewMode !== 'pentatonic') return null;
+    
+    try {
+      return getTransposedBoxFrets(rootIndex, patternId, tuning);
+    } catch {
+      return null;
+    }
+  }, [patternId, rootIndex, viewMode, tuning]);  // Check if a position is disabled
   const isPositionDisabled = useCallback(
     (string: number, fret: number): boolean => {
       return disabledPositions.some((pos) => pos.string === string && pos.fret === fret);
@@ -232,7 +255,7 @@ export function Fretboard({
   const renderFret = (stringNum: number, fret: number) => {
     const stringIndex = strings - stringNum; // convert to array index (0-based)
     const noteIndex = (tuning[stringIndex] + fret) % 12;
-    
+
     const isInScale = scaleData?.noteIndices.includes(noteIndex) ?? false;
     const isRoot = rootIndex !== null && noteIndex === rootIndex;
     const isHighlighted = highlightedNotes.includes(noteIndex);
@@ -241,15 +264,18 @@ export function Fretboard({
     const isFocused = isPositionFocused(stringNum, fret);
     const annotation = getAnnotation(stringNum, fret);
 
+    // Check if in CAGED pattern
+    const isInCaged = cagedPattern?.perString[stringNum]?.includes(fret) ?? false;
+
     // Determine if note should be active based on view mode
     let isActive = false;
     if (viewMode === 'notes') {
       isActive = isHighlighted; // Free mode: only show highlighted notes
+    } else if (viewMode === 'pentatonic' && cagedPattern) {
+      isActive = isInCaged; // Use CAGED pattern positions
     } else {
       isActive = isInScale;
-    }
-
-    const classNames = [
+    }    const classNames = [
       styles.fret,
       isActive ? styles.active : '',
       isRoot && isActive ? styles.root : '',
@@ -267,9 +293,13 @@ export function Fretboard({
     if (showLabels && isActive && !isDisabled) {
       if (annotation) {
         label = annotation.label;
-      } else if (fingeringNumbers) {
-        // TODO: Calculate fingering based on pattern
-        label = '';
+      } else if (fingeringNumbers && cagedPattern) {
+        // Calculate fingering number (1-4) based on fret position within pattern
+        const minFret = cagedPattern.minFret ?? 0;
+        const fretOffset = fret - minFret;
+        if (fretOffset >= 0 && fretOffset <= 3) {
+          label = String(fretOffset + 1); // Fingers 1-4
+        }
       } else {
         label = EN_NOTES[noteIndex];
       }
@@ -335,9 +365,21 @@ export function Fretboard({
   // Render string rows
   const stringNumbers = Array.from({ length: strings }, (_, i) => strings - i);
 
+  // Apply custom theme if provided
+  const customThemeStyle = typeof theme === 'object' ? {
+    '--fretboard-root-color': theme.root,
+    '--fretboard-active-color': theme.active,
+    '--fretboard-bg-color': theme.background,
+    '--fretboard-string-color': theme.stringColor,
+    '--fretboard-fret-color': theme.fretColor,
+    '--fretboard-highlighted-color': theme.highlighted,
+  } as React.CSSProperties : undefined;
+
+  const themeClass = typeof theme === 'string' ? theme : 'custom';
+
   const containerClassNames = [
     styles.container,
-    styles[theme],
+    styles[themeClass],
     styles[orientation],
     !interactive ? styles.nonInteractive : '',
   ]
@@ -348,7 +390,7 @@ export function Fretboard({
   const ariaLabelText = `Fretboard: ${rootNoteName} ${viewMode}, ${frets} frets, ${strings} strings`;
 
   return (
-    <div className={containerClassNames} role="region" aria-label={ariaLabelText}>
+    <div className={containerClassNames} role="region" aria-label={ariaLabelText} style={customThemeStyle}>
       <div className={styles.controls}>
         <span className={styles.label}>
           Root: {rootNoteName} | View: {viewMode} 

@@ -258,3 +258,66 @@ export const Interactive: Story = {
     theme: 'light',
   },
 };
+
+
+// Enhancement: CAGED Pattern Integration
+export const CAGEDPatternExample: Story = {
+  args: {
+    viewMode: 'pentatonic',
+    rootNote: 'A',
+    patternId: 1,
+    strings: 6,
+    frets: 15,
+    showLabels: true,
+    showFretNumbers: true,
+    theme: 'light',
+  },
+};
+
+// Enhancement: Custom Scale Type
+export const CustomScaleType: Story = {
+  args: {
+    viewMode: 'scale',
+    rootNote: 'C',
+    scaleType: 'major',
+    strings: 6,
+    frets: 15,
+    showLabels: true,
+    showFretNumbers: true,
+    theme: 'light',
+  },
+};
+
+// Enhancement: With Fingering Numbers
+export const WithFingeringNumbers: Story = {
+  args: {
+    viewMode: 'pentatonic',
+    rootNote: 'E',
+    patternId: 1,
+    fingeringNumbers: true,
+    strings: 6,
+    frets: 15,
+    showLabels: true,
+    theme: 'dark',
+  },
+};
+
+// Enhancement: Custom Theme Colors
+export const CustomThemeColors: Story = {
+  args: {
+    viewMode: 'scale',
+    rootNote: 'D',
+    scaleType: 'minor',
+    strings: 6,
+    frets: 15,
+    showLabels: true,
+    theme: {
+      root: '#ff6b35',
+      active: '#004e89',
+      background: '#f7f7f7',
+      stringColor: '#1a1a1a',
+      fretColor: '#cccccc',
+      highlighted: '#ffcc00',
+    },
+  },
+};
