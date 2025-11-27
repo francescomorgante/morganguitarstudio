@@ -2,13 +2,7 @@ import React, { useState } from 'react';
 import { Fretboard } from '../components/Fretboard';
 import { ChordDiagram } from '../components/ChordDiagram';
 import { EN_NOTES } from '../lib/music/notes';
-import {
-  CHORD_TYPES,
-  getChord,
-  OPEN_CHORD_VOICINGS,
-  ChordVoicing,
-  ChordPosition,
-} from '../lib/music/chords';
+import { CHORD_TYPES, getChord, OPEN_CHORD_VOICINGS, ChordVoicing } from '../lib/music/chords';
 import styles from '../styles/chords.module.css';
 
 export const Chords: React.FC = () => {
@@ -143,7 +137,8 @@ export const Chords: React.FC = () => {
       <section className={styles.fretboardSection} aria-label="Tastiera chitarra">
         <h2 className={styles.sectionTitle}>Visualizzazione sulla tastiera</h2>
         <p className={styles.fretboardDescription}>
-          Le note evidenziate mostrano tutte le posizioni dell'accordo {chordName} sulla tastiera.
+          Le note evidenziate mostrano tutte le posizioni dell&apos;accordo {chordName} sulla
+          tastiera.
         </p>
         <div className={styles.fretboardContainer}>
           <Fretboard

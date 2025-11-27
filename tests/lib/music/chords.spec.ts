@@ -6,7 +6,6 @@ import {
   OPEN_CHORD_VOICINGS,
   mapChordToPositions,
 } from '../../../src/lib/music/chords';
-import { EN_NOTES } from '../../../src/lib/music/notes';
 
 describe('chords library', () => {
   describe('CHORD_TYPES', () => {

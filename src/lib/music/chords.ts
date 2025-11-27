@@ -217,7 +217,7 @@ export const OPEN_CHORD_VOICINGS: Record<string, ChordVoicing[]> = {
 export function mapChordToPositions(
   rootNote: string,
   chordType: string,
-  tuning: number[] = [4, 9, 2, 7, 11, 4] // Standard tuning
+  _tuning: number[] = [4, 9, 2, 7, 11, 4] // Standard tuning
 ): ChordPosition[] {
   // Check if we have a pre-defined voicing
   const voicingKey = rootNote + (CHORD_TYPES[chordType]?.symbol || '');
