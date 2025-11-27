@@ -1,0 +1,176 @@
+/* ChordDiagram.module.css - Styling for chord diagram SVG component */
+
+.chordDiagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: var(--bg-secondary, #f9fafb);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+.chordName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
+  margin-bottom: 0.25rem;
+}
+
+.fretNumber {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary, #6b7280);
+  position: absolute;
+  left: -1.5rem;
+  top: 2.5rem;
+}
+
+.diagram {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  color: var(--text-primary, #1f2937);
+}
+
+/* Diagram elements */
+.nut {
+  fill: #1f2937;
+}
+
+.fret {
+  stroke: #6b7280;
+}
+
+.string {
+  stroke: #9ca3af;
+}
+
+.openString {
+  stroke: #1f2937;
+  fill: none;
+}
+
+.mutedString {
+  stroke: #1f2937;
+}
+
+.fingerDot {
+  fill: #1f2937;
+}
+
+.fingerNumber {
+  fill: #ffffff;
+  font-weight: 600;
+}
+
+/* String labels */
+.stringLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 180px;
+  margin-top: 0.25rem;
+}
+
+.stringLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6b7280);
+  text-align: center;
+  min-width: 20px;
+}
+
+/* Size variants */
+.diagram-small .diagram {
+  max-width: 120px;
+}
+
+.diagram-small .chordName {
+  font-size: 1rem;
+}
+
+.diagram-small .stringLabels {
+  max-width: 110px;
+}
+
+.diagram-medium .diagram {
+  max-width: 200px;
+}
+
+.diagram-large .diagram {
+  max-width: 280px;
+}
+
+.diagram-large .chordName {
+  font-size: 1.5rem;
+}
+
+.diagram-large .stringLabels {
+  max-width: 260px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .chordDiagram {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .chordName {
+    color: #f9fafb;
+  }
+
+  .fretNumber {
+    color: #d1d5db;
+  }
+
+  .diagram {
+    color: #f9fafb;
+  }
+
+  .nut,
+  .fingerDot {
+    fill: #f9fafb;
+  }
+
+  .fret {
+    stroke: #9ca3af;
+  }
+
+  .string {
+    stroke: #6b7280;
+  }
+
+  .openString,
+  .mutedString {
+    stroke: #f9fafb;
+  }
+
+  .fingerNumber {
+    fill: #1f2937;
+  }
+
+  .stringLabel {
+    color: #9ca3af;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chordDiagram {
+    padding: 0.75rem;
+  }
+
+  .chordName {
+    font-size: 1.125rem;
+  }
+
+  .diagram {
+    max-width: 160px;
+  }
+
+  .stringLabels {
+    max-width: 150px;
+  }
+}

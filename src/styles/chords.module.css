@@ -1,0 +1,259 @@
+/* Chords.module.css - Styling for Chords page */
+
+.chordsPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #1f2937);
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: var(--text-secondary, #6b7280);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.select {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 6px;
+  background-color: var(--bg-primary, #ffffff);
+  color: var(--text-primary, #1f2937);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select:hover {
+  border-color: var(--border-hover, #9ca3af);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Theory Section */
+.theory {
+  background-color: var(--bg-secondary, #f9fafb);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.theoryTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
+  margin-bottom: 1rem;
+}
+
+.theoryContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.theoryItem {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.theoryLabel {
+  font-weight: 600;
+  color: var(--text-secondary, #6b7280);
+  min-width: 100px;
+}
+
+.theoryValue {
+  color: var(--text-primary, #1f2937);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Diagram Section */
+.diagramSection {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
+  margin-bottom: 1rem;
+}
+
+.diagramContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.diagramNote {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.difficulty {
+  font-weight: 600;
+  color: var(--primary-color, #3b82f6);
+  text-transform: capitalize;
+}
+
+.noVoicing {
+  padding: 2rem;
+  background-color: var(--bg-secondary, #f9fafb);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  color: var(--text-secondary, #6b7280);
+  font-style: italic;
+}
+
+/* Fretboard Section */
+.fretboardSection {
+  margin-bottom: 2rem;
+}
+
+.fretboardDescription {
+  font-size: 1rem;
+  color: var(--text-secondary, #6b7280);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.fretboardContainer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background-color: var(--bg-secondary, #f9fafb);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .title,
+  .label,
+  .theoryTitle,
+  .sectionTitle {
+    color: #f9fafb;
+  }
+
+  .description,
+  .theoryLabel,
+  .diagramNote,
+  .fretboardDescription {
+    color: #d1d5db;
+  }
+
+  .select {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  .select:hover {
+    border-color: #4b5563;
+  }
+
+  .theory,
+  .fretboardContainer,
+  .noVoicing {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .theoryValue {
+    color: #f9fafb;
+  }
+
+  .difficulty {
+    color: #60a5fa;
+  }
+
+  .noVoicing {
+    color: #9ca3af;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chordsPage {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controlGroup {
+    min-width: 100%;
+  }
+
+  .theory {
+    padding: 1rem;
+  }
+
+  .theoryItem {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .theoryLabel {
+    min-width: auto;
+  }
+
+  .fretboardContainer {
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+}
